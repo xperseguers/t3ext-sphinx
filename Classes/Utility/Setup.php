@@ -135,14 +135,6 @@ class Setup
         $tempPath = MiscUtility::getTemporaryPath();
         $sphinxSourcesPath = static::getSphinxSourcesPath();
 
-        // There is a redirect from the URI in the web interface. E.g.,
-        // https://github.com/sphinx-doc/sphinx/archive/1.3.zip
-        // and the actual download link:
-        // https://codeload.github.com/sphinx-doc/sphinx/zip/1.3
-        if (preg_match('#https://github.com/sphinx-doc/sphinx/archive/([0-9b.]+?)\\.zip#', $url, $matches)) {
-            $url = 'https://codeload.github.com/sphinx-doc/sphinx/zip/' . $matches[1];
-        }
-
         $zipFilename = $tempPath . $version . '.zip';
         static::$log[] = '[INFO] Fetching ' . $url;
         $zipContent = MiscUtility::getUrl($url);
@@ -152,7 +144,7 @@ class Setup
 
             // Unzip the Sphinx archive
             $out = array();
-            if (static::unarchive($zipFilename, $targetPath, 'sphinx-' . $version)) {
+            if (static::unarchive($zipFilename, $targetPath, 'sphinx-doc-sphinx-')) {
                 $output[] = '[INFO] Sphinx ' . $version . ' has been unpacked.';
 
                 // Patch Sphinx to let us get colored output
@@ -1258,34 +1250,29 @@ EOT;
      */
     public static function getSphinxAvailableVersions()
     {
-        $html = MiscUtility::getUrlWithCache('https://github.com/sphinx-doc/sphinx/releases');
+        $versions = [];
+        // for some reason the releases API does not yield any results, so we use the tags API
+        $rawJson = MiscUtility::getUrlWithCache('https://api.github.com/repos/sphinx-doc/sphinx/tags');
+        $json = \json_decode($rawJson);
 
-        $tagsHtml = substr($html, strpos($html, '<ul class="release-timeline-tags">'));
-        $tagsHtml = substr($tagsHtml, 0, strpos($tagsHtml, '<div data-pjax class="paginate-container">'));
+        foreach($json as $tag) {
+            $key = $tag->{'name'};
+            $name = $key;
+            $url = $tag->{'zipball_url'};
 
-        $versions = array();
-        preg_replace_callback(
-            '#<div class="tag-info commit js-details-container Details">.*?<span class="tag-name">([^<]*)</span>.*?<a href="([^"]+)" rel="nofollow">.*?zip.*?</a>#s',
-            function ($matches) use (&$versions) {
-                if ($matches[1] !== 'tip' && version_compare($matches[1], '1.1.3', '>=')) {
-                    $key = $matches[1];
-                    $name = $key;
-                    // Make sure main release (e.g., "1.2") gets a ".0" patch release version as well
-                    if (preg_match('/^\d+\.\d+$/', $name)) {
-                        $name .= '.0';
-                    }
-                    // Fix sorting of alpha/beta releases
-                    $name = str_replace(['a', 'b'], [' alpha ', ' beta '], $name);
+            // Make sure main release (e.g., "1.2") gets a ".0" patch release version as well
+            if (preg_match('/^\d+\.\d+$/', $name)) {
+                $name .= '.0';
+            }
+            // Fix sorting of alpha/beta releases
+            $name = str_replace(['a', 'b'], [' alpha ', ' beta '], $name);
 
-                    $versions[$name] = array(
-                        'key' => $key,
-                        'name' => $name,
-                        'url' => $matches[2],
-                    );
-                }
-            },
-            $tagsHtml
-        );
+            $versions[$name] = [
+                'key' => $key,
+                'name' => $name,
+                'url' => $url,
+            ];
+        }
 
         krsort($versions);
         return $versions;
