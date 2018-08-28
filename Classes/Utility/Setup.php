@@ -152,7 +152,7 @@ class Setup
 
             // Unzip the Sphinx archive
             $out = array();
-            if (static::unarchive($zipFilename, $targetPath, 'sphinx-' . $version)) {
+            if (static::unarchive($zipFilename, $targetPath, 'sphinx-doc-sphinx-')) {
                 $output[] = '[INFO] Sphinx ' . $version . ' has been unpacked.';
 
                 // Patch Sphinx to let us get colored output
