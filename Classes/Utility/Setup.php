@@ -135,14 +135,6 @@ class Setup
         $tempPath = MiscUtility::getTemporaryPath();
         $sphinxSourcesPath = static::getSphinxSourcesPath();
 
-        // There is a redirect from the URI in the web interface. E.g.,
-        // https://github.com/sphinx-doc/sphinx/archive/1.3.zip
-        // and the actual download link:
-        // https://codeload.github.com/sphinx-doc/sphinx/zip/1.3
-        if (preg_match('#https://github.com/sphinx-doc/sphinx/archive/([0-9b.]+?)\\.zip#', $url, $matches)) {
-            $url = 'https://codeload.github.com/sphinx-doc/sphinx/zip/' . $matches[1];
-        }
-
         $zipFilename = $tempPath . $version . '.zip';
         static::$log[] = '[INFO] Fetching ' . $url;
         $zipContent = MiscUtility::getUrl($url);
