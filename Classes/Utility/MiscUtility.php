@@ -17,6 +17,7 @@ namespace Causal\Sphinx\Utility;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
@@ -1376,8 +1377,9 @@ YAML;
         static $availableAndInstalledExtensions = null;
 
         if (version_compare(TYPO3_version, '7.99.99', '<=')) {
-            if (isset($GLOBALS['TYPO3_LOADED_EXT'][$extensionKey])) {
-                return $GLOBALS['TYPO3_LOADED_EXT'][$extensionKey]['siteRelPath'];
+            $packageManager = GeneralUtility::makeInstance(PackageManager::class);
+            if ($packageManager->isPackageActive($extensionKey)) {
+                return $packageManager->getPackage($extensionKey)->getPackagePath();
             }
         }
         if ($availableAndInstalledExtensions === null) {
