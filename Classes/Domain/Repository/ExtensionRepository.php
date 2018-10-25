@@ -14,6 +14,7 @@
 
 namespace Causal\Sphinx\Domain\Repository;
 
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Causal\Sphinx\Utility\MiscUtility;
 
@@ -165,33 +166,29 @@ class ExtensionRepository implements \TYPO3\CMS\Core\SingletonInterface
     public function findExtensionsBySearchTerm(array $extensionKeys, $searchTerm, $limit)
     {
         $extensionTable = 'tx_extensionmanager_domain_model_extension';
-        $extensions = $this->getDatabaseConnection()->exec_SELECTgetRows(
-            'DISTINCT extension_key, title',
-            $extensionTable,
-            $this->getSafeInClause('extension_key', array_map(function ($e) {
-                return "'" . $e . "'";
-            }, $extensionKeys)) .
-            ' AND ' . $this->getDatabaseConnection()->searchQuery(
-                array($searchTerm),
-                array('extension_key', 'title', 'description'),
-                $extensionTable
-            ),
-            '',
-            'extension_key, last_updated',
-            $limit,
-            'extension_key'
-        );
+
+        $qBuilder = GeneralUtility::makeInstance(QueryBuilder::class);
+        $qBuilder
+            ->select('extension_key, title')
+            ->from($extensionTable)
+            ->where($this->getSafeInClause('extension_key', array_map(function ($e) {return "'" . $e . "'";}, $extensionKeys)))
+            ->andWhere("(extension_key LIKE %$searchTerm% OR title LIKE %$searchTerm% OR description LIKE %$searchTerm%)")
+            ->groupBy('extension_key, title')
+            ->orderBy('extension_key')
+            ->setMaxResults($limit);
+
+        $extensions = $qBuilder->execute()->fetchAll();
 
         // TYPO3 6.2 is shipping Sphinx-based manuals for system extensions but they are not published to
         // TER and as such cannot be cross-linked to easily
         $systemExtensions = $this->getSystemExtensionsWithSphinxDocumentation();
-        foreach ($systemExtensions as $extension) {
+        foreach ($systemExtensions as &$extension) {
             if (stripos($extension['extensionKey'], $searchTerm) !== false
                 || stripos($extension['title'], $searchTerm) !== false
                 || stripos($extension['description'], $searchTerm) !== false
             ) {
 
-                $extensions[$extension['extensionKey']] = array(
+                $extension = array(
                     'extension_key' => $extension['extensionKey'],
                     'title' => $extension['title']
                 );
@@ -329,16 +326,6 @@ class ExtensionRepository implements \TYPO3\CMS\Core\SingletonInterface
         $extension->setDescription($metadata['description']);
 
         return $extension;
-    }
-
-    /**
-     * Returns the database connection.
-     *
-     * @return \TYPO3\CMS\Core\Database\DatabaseConnection
-     */
-    protected function getDatabaseConnection()
-    {
-        return $GLOBALS['TYPO3_DB'];
     }
 
     /**

@@ -16,6 +16,7 @@ namespace Causal\Sphinx\Utility;
 
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
@@ -464,9 +465,6 @@ HTML;
      */
     public static function intersphinxKeyToExtensionKey($intersphinxKey)
     {
-        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $databaseConnection */
-        $databaseConnection = $GLOBALS['TYPO3_DB'];
-
         // We filter the query by using the first two letters of the intersphinx key
         // or first letter and an underscore
         //
@@ -481,22 +479,18 @@ HTML;
         // The additional condition "WHERE extension_key LIKE '%\_%'" has not been added
         // because it did not seem to be really significant to trim down the list even more.
         $table = 'tx_extensionmanager_domain_model_extension';
-        $rows = $databaseConnection->exec_SELECTgetRows(
-            'DISTINCT extension_key',
-            $table,
-            'extension_key LIKE ' . $databaseConnection->fullQuoteStr(
-                $databaseConnection->escapeStrForLike(substr($intersphinxKey, 0, 2), $table) . '%',
-                $table
-            ) . ' OR extension_key LIKE ' . $databaseConnection->fullQuoteStr(
-                $databaseConnection->escapeStrForLike($intersphinxKey{0} . '_', $table) . '%',
-                $table
-            ),
-            '',
-            'last_updated'
-        );
+
+        $qBuilder = GeneralUtility::makeInstance(QueryBuilder::class);
+        $qBuilder
+            ->select('extension_key')
+            ->from($table)
+            ->where(sprintf('extension_key LIKE %s%%', substr($intersphinxKey, 0, 2)))
+            ->orWhere(sprintf('extension_key LIKE %s%%',$intersphinxKey{0} . '_', $table))
+            ->groupBy('extension_key')
+            ->orderBy('last_updated');
 
         $mapping = array();
-        foreach ($rows as $row) {
+        foreach ($qBuilder->execute()->fetchAll() as $row) {
             $key = str_replace('_', '', $row['extension_key']);
             $mapping[$key] = $row['extension_key'];
         }
