@@ -34,7 +34,7 @@ class ExtensionRepository implements \TYPO3\CMS\Core\SingletonInterface
 
     /**
      * @var \TYPO3\CMS\Extensionmanager\Utility\ListUtility
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $listUtility;
 

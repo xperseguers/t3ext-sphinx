@@ -37,7 +37,7 @@ class CustomProject
 
     /**
      * @var \Causal\Sphinx\Domain\Repository\ProjectRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $projectRepository;
 

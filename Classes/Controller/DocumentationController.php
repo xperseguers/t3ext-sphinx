@@ -35,13 +35,13 @@ class DocumentationController extends AbstractActionController
      * Extension repository
      *
      * @var \Causal\Sphinx\Domain\Repository\ExtensionRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $extensionRepository;
 
     /**
      * @var \Causal\Sphinx\Domain\Repository\ProjectRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $projectRepository;
 

@@ -35,7 +35,7 @@ class RestEditorController extends AbstractActionController
 
     /**
      * @var \Causal\Sphinx\Domain\Repository\DocumentationRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $documentationRepository;
 

@@ -32,7 +32,7 @@ class DocumentationRepository implements \TYPO3\CMS\Core\SingletonInterface
 
     /**
      * @var \Causal\Sphinx\Domain\Repository\ExtensionRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $extensionRepository;
 
