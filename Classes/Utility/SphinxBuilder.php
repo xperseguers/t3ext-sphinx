@@ -15,6 +15,7 @@
 namespace Causal\Sphinx\Utility;
 
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 
@@ -458,7 +459,7 @@ class SphinxBuilder
         $make = \TYPO3\CMS\Core\Utility\CommandUtility::getCommand('make');
         $pdflatex = \TYPO3\CMS\Core\Utility\CommandUtility::getCommand('pdflatex');
 
-        if (TYPO3_OS !== 'WIN' && empty($make)) {
+        if (!Environment::isWindows() && empty($make)) {
             throw new \RuntimeException('Command `make\' was not found.', 1367239044);
         }
         if (empty($pdflatex)) {
@@ -725,7 +726,7 @@ class SphinxBuilder
             );
             $sphinxBuilder = $sphinxPath . 'bin/sphinx-build';
 
-            if (TYPO3_OS === 'WIN') {
+            if (Environment::isWindows()) {
                 $sphinxBuilder .= '.exe';
             }
         }
@@ -935,7 +936,7 @@ class SphinxBuilder
      */
     protected static function safeEscapeshellarg($arg)
     {
-        if (!(TYPO3_OS === 'WIN' && strpos($arg, ' ') === false)) {
+        if (!(Environment::isWindows() && strpos($arg, ' ') === false)) {
             $arg = escapeshellarg($arg);
         }
         return $arg;
@@ -951,7 +952,7 @@ class SphinxBuilder
      */
     protected static function safeExec($command, &$output = null, &$returnValue = 0)
     {
-        if (TYPO3_OS === 'WIN' && strpos($command, ' && ') !== false) {
+        if (Environment::isWindows() && strpos($command, ' && ') !== false) {
             // Multiple commands are not supported on Windows
             // We use an intermediate batch file instead
             $relativeBatchFilename = 'typo3temp/tx_' . static::$extKey . '/build-' . $GLOBALS['EXEC_TIME'] . '.bat';

@@ -14,6 +14,7 @@
 
 namespace Causal\Sphinx\EM;
 
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\CommandUtility;
 use Causal\Sphinx\Utility\Setup;
@@ -89,7 +90,7 @@ class Configuration
                 $scriptFilename = $sphinxPath . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . $script;
                 $scriptVersion = $script . '-' . $selectedVersion;
 
-                if (TYPO3_OS === 'WIN') {
+                if (Environment::isWindows()) {
                     $scriptFilename .= '.bat';
                     $scriptVersion .= '.bat';
 

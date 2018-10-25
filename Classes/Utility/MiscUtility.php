@@ -15,6 +15,7 @@
 namespace Causal\Sphinx\Utility;
 
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
@@ -970,7 +971,7 @@ HTML;
      */
     public static function getExportCommand($variable, $value)
     {
-        if (TYPO3_OS === 'WIN') {
+        if (Environment::isWindows()) {
             $pattern = 'SET %s=%s';
             $value = preg_replace('/\$' . $variable . '([^A-Za-z]|$)/', '%' . $variable . '%', $value);
         } else {
