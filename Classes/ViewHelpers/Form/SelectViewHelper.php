@@ -112,7 +112,7 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
         if ($this->hasArgument('prependOptionLabel')) {
             $value = $this->hasArgument('prependOptionValue') ? $this->arguments['prependOptionValue'] : '';
             $label = $this->arguments['prependOptionLabel'];
-            $icon = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($this->extKey) .
+            $icon = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($this->extKey) .
                 'Resources/Public/Images/dashboard.png';
             $output .= $this->renderOptionTag($value, $label, $icon, false) . LF;
         }
