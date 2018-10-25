@@ -14,6 +14,7 @@
 
 namespace Causal\Sphinx\Utility;
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
@@ -648,7 +649,7 @@ HTML;
             $documentationBasePath = $basePath . '/Localization.' . $locale;
         }
 
-        $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$extKey]);
+        $configuration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(static::$extKey);
         $synchronizeFileExtensions = !empty($configuration['rsync_files'])
             ? GeneralUtility::trimExplode(',', $configuration['rsync_files'], true)
             : array();
@@ -845,7 +846,7 @@ HTML;
             static::recursiveCopy($documentationBasePath . '/_make/build/' . $documentationFormat, $absoluteOutputDirectory);
         } else {
             // Only copy PDF output
-            $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$extKey]);
+            $configuration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(static::$extKey);
             switch ($configuration['pdf_builder']) {
                 case 'pdflatex':
                     copy($documentationBasePath . '/_make/build/latex/' . $extensionKey . '.pdf', $absoluteOutputDirectory . '/' . $extensionKey . '.pdf');

@@ -14,6 +14,7 @@
 
 namespace Causal\Sphinx\Utility;
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 
@@ -58,7 +59,7 @@ class SphinxBuilder
      */
     public static function isSystemVersion()
     {
-        $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$extKey]);
+        $configuration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(static::$extKey);
         return $configuration['version'] === 'SYSTEM';
     }
 
@@ -70,7 +71,7 @@ class SphinxBuilder
      */
     protected static function autoRecompileWithFaultyExtension()
     {
-        $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$extKey]);
+        $configuration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(static::$extKey);
         return $configuration['auto_continue'] !== '0';
     }
 
@@ -85,7 +86,7 @@ class SphinxBuilder
      */
     protected static function getNumberOfProcesses()
     {
-        $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$extKey]);
+        $configuration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(static::$extKey);
         $processes = isset($configuration['processes']) ? (int)$configuration['processes'] : 1;
         return max(1, $processes);
     }
@@ -108,7 +109,7 @@ class SphinxBuilder
                 $version = end($versionParts);
             }
         } else {
-            $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$extKey]);
+            $configuration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(static::$extKey);
             $version = $configuration['version'];
         }
         return $version;
@@ -423,7 +424,7 @@ class SphinxBuilder
      */
     public static function buildPdf($basePath, $sourceDirectory = '.', $buildDirectory = '_build', $conf = '', $language = '', array $tags = array(), $useCache = false)
     {
-        $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$extKey]);
+        $configuration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(static::$extKey);
 
         switch ($configuration['pdf_builder']) {
             case 'pdflatex':

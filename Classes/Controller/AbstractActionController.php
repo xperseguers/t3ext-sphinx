@@ -14,6 +14,7 @@
 
 namespace Causal\Sphinx\Controller;
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -42,13 +43,20 @@ abstract class AbstractActionController extends \TYPO3\CMS\Extbase\Mvc\Controlle
      *
      * @return void
      */
-    protected function injectSettings()
-    {
-        $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->request->getControllerExtensionKey()]);
+    protected function injectSettings() {
+        $extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class);
+        try
+        {
+            $configuration = $extConf->get( $this->request->getControllerExtensionKey() );
+        }
+        catch ( \Exception $e )
+        {
+            $configuration = array();
+        }
         if (!is_array($configuration)) {
             $configuration = array();
         }
-        $this->settings = GeneralUtility::array_merge($configuration, $this->settings);
+        $this->settings = $configuration + $this->settings;
     }
 
     /**

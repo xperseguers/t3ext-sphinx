@@ -14,6 +14,7 @@
 
 namespace Causal\Sphinx\Slots;
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use Causal\Sphinx\Utility\MiscUtility;
@@ -50,7 +51,7 @@ class CustomProject
      */
     public function __construct()
     {
-        $this->settings = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$extKey]);
+        $this->settings = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(static::$extKey);
     }
 
     /**
