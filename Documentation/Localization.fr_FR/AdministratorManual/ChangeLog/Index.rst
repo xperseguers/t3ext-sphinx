@@ -12,7 +12,7 @@ Journal des modifications
 -------------------------
 
 Ce qui suit est une vue d'ensemble très haut niveau des changements de cette extension. Pour plus de détails,
-`lisez le journal des modifications en ligne <https://git.typo3.org/TYPO3CMS/Extensions/sphinx.git/log>`_.
+`lisez le journal des modifications en ligne <https://github.com/xperseguers/t3ext-sphinx/commits/master>`_.
 
 
 .. tabularcolumns:: |r|p{13.7cm}|
@@ -20,6 +20,7 @@ Ce qui suit est une vue d'ensemble très haut niveau des changements de cette ex
 =======  ===========================================================================
 Version  Changements
 =======  ===========================================================================
+2.6.x    - Compatibilité TYPO3 v8 et v9, suppression du support de TYPO3 v7
 2.5.x    - Suppression du support de TYPO3 6.2
 2.4.x    - Nouveau thème sphinx-doc selon docs.typo3.org
 2.3.x    - Rendu parallélisé pour accélérer le processus

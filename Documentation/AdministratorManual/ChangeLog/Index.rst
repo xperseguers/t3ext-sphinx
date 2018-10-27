@@ -11,13 +11,15 @@
 ChangeLog
 ---------
 
-The following is a very high level overview of the changes in this extension. For more details, `read the online log <https://git.typo3.org/TYPO3CMS/Extensions/sphinx.git/log>`_.
+The following is a very high level overview of the changes in this extension. For more details,
+`read the online log <https://github.com/xperseguers/t3ext-sphinx/commits/master>`_.
 
 .. tabularcolumns:: |r|p{13.7cm}|
 
 =======  ===========================================================================
 Version  Changes
 =======  ===========================================================================
+2.6.x    - Compatibility with TYPO3 v8 and v9, drop support for TYPO3 v7
 2.5.x    - Drop support for TYPO3 6.2
 2.4.x    - New sphinx-doc theme from docs.typo3.org
 2.3.x    - Parallel building to speed-up rendering
