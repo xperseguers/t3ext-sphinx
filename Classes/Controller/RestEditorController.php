@@ -35,7 +35,7 @@ class RestEditorController extends AbstractActionController
 
     /**
      * @var \Causal\Sphinx\Domain\Repository\DocumentationRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $documentationRepository;
 
@@ -457,12 +457,11 @@ class RestEditorController extends AbstractActionController
     {
         $response = array();
 
-        $fileExtensions = $GLOBALS['TYPO3_CONF_VARS']['BE']['fileExtensions'];
         $this->view->assignMultiple(array(
             'reference' => $reference,
             'path' => $path,
-            'allowedExtensions' => $fileExtensions['webspace']['allow'] ?: '*',
-            'deniedExtensions' => $fileExtensions['webspace']['deny'],
+            'allowedExtensions' => '*',
+            'deniedExtensions' =>  $GLOBALS['TYPO3_CONF_VARS']['BE']['fileDenyPattern'],
         ));
 
         $response['status'] = 'success';
@@ -574,22 +573,14 @@ class RestEditorController extends AbstractActionController
         if (isset($fileExtensions[$type])) {
             $fileType = strtolower($fileType);
             if ($fileType) {
-                // If the extension is found amongst the allowed types, we return true immediately
-                if ($fileExtensions[$type]['allow'] === '*' || GeneralUtility::inList($fileExtensions[$type]['allow'], $fileType)) {
-                    return true;
-                }
                 // If the extension is found amongst the denied types, we return false immediately
-                if ($fileExtensions[$type]['deny'] === '*' || GeneralUtility::inList($fileExtensions[$type]['deny'], $fileType)) {
+                if ($GLOBALS['TYPO3_CONF_VARS']['BE']['fileDenyPattern'] === '*' || preg_match_all($GLOBALS['TYPO3_CONF_VARS']['BE']['fileDenyPattern'], $fileType)) {
                     return false;
                 }
                 // If no match we return true
                 return true;
             } else {
-                // If no extension:
-                if ($fileExtensions[$type]['allow'] === '*') {
-                    return true;
-                }
-                if ($fileExtensions[$type]['deny'] === '*') {
+                if ($GLOBALS['TYPO3_CONF_VARS']['BE']['fileDenyPattern'] === '*') {
                     return false;
                 }
                 return true;

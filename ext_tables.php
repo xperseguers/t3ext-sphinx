@@ -2,7 +2,7 @@
 defined('TYPO3_MODE') || die();
 
 if (TYPO3_MODE === 'BE') {
-	$sphinxConfiguration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sphinx']);
+	$sphinxConfiguration = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)->get('sphinx');
 
 	\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
 		'Causal.' . $_EXTKEY,

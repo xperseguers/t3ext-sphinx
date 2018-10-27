@@ -14,6 +14,7 @@
 
 namespace Causal\Sphinx\Controller;
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Causal\Sphinx\Utility\MiscUtility;
 
@@ -34,13 +35,13 @@ class DocumentationController extends AbstractActionController
      * Extension repository
      *
      * @var \Causal\Sphinx\Domain\Repository\ExtensionRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $extensionRepository;
 
     /**
      * @var \Causal\Sphinx\Domain\Repository\ProjectRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $projectRepository;
 
@@ -324,7 +325,7 @@ class DocumentationController extends AbstractActionController
             'json' => $this->translate('documentationLayout_interactive'),
         );
 
-        $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sphinx']);
+        $configuration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('sphinx');
         switch ($configuration['pdf_builder']) {
             case 'pdflatex':
                 $renderPdf = \TYPO3\CMS\Core\Utility\CommandUtility::getCommand('pdflatex') !== '';

@@ -14,6 +14,7 @@
 
 namespace Causal\Sphinx\Utility;
 
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\CommandUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
@@ -260,7 +261,7 @@ class Setup
                 $shortcutFilename = $sphinxPath . 'bin' . DIRECTORY_SEPARATOR . $shortcutScript . '-' . $version;
                 $scriptFilename = $sphinxPath . $version . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . $shortcutScript;
 
-                if (TYPO3_OS === 'WIN') {
+                if (Environment::isWindows()) {
                     $shortcutFilename .= '.bat';
                     $scriptFilename .= '.exe';
 
@@ -325,7 +326,7 @@ EOT;
         foreach ($shortcutScripts as $shortcutScript) {
             $shortcutFilename = $sphinxPath . 'bin' . DIRECTORY_SEPARATOR . $shortcutScript;
 
-            if (TYPO3_OS === 'WIN') {
+            if (Environment::isWindows()) {
                 $shortcutFilename .= '.bat';
             }
 
@@ -603,7 +604,7 @@ EOT;
                 $directories = GeneralUtility::get_dirs($buildPath);
                 foreach ($directories as $directory) {
                     if (GeneralUtility::isFirstPartOfStr($directory, 'lib.')) {
-                        if (TYPO3_OS === 'WIN') {
+                        if (Environment::isWindows()) {
                             GeneralUtility::mkdir($buildPath . 'lib');
                             MiscUtility::recursiveCopy($buildPath . $directory, $buildPath . 'lib');
                         } else {

@@ -16,6 +16,8 @@ namespace Causal\Sphinx;
 
 $BACK_PATH = $GLOBALS['BACK_PATH'] . TYPO3_mainDir;
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Causal\Sphinx\Utility\Setup;
 
@@ -44,7 +46,7 @@ class ext_update extends \TYPO3\CMS\Backend\Module\BaseScriptClass
      */
     public function __construct()
     {
-        $this->configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->extKey]);
+        $this->configuration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get($this->extKey);
     }
 
     /**
@@ -198,7 +200,7 @@ HTML;
         $out[] = '<th>Manual Process</th>';
         $out[] = '</tr>';
 
-        $installRst2Pdf = TYPO3_OS !== 'WIN' && $this->configuration['install_rst2pdf'] === '1';
+        $installRst2Pdf = !Environment::isWindows() && $this->configuration['install_rst2pdf'] === '1';
         $changes = array();
 
         /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
@@ -300,7 +302,7 @@ HTML;
     protected function downloadSphinx(array $data, array &$output)
     {
         $success = true;
-        $installRst2Pdf = TYPO3_OS !== 'WIN' && $this->configuration['install_rst2pdf'] === '1';
+        $installRst2Pdf = !Environment::isWindows() && $this->configuration['install_rst2pdf'] === '1';
         $version = $data['key'];
         $url = $data['url'];
 
@@ -352,7 +354,7 @@ HTML;
     {
         $success = false;
         $version = $data['key'];
-        $installRst2Pdf = TYPO3_OS !== 'WIN' && $this->configuration['install_rst2pdf'] === '1';
+        $installRst2Pdf = !Environment::isWindows() && $this->configuration['install_rst2pdf'] === '1';
 
         if (Setup::hasSphinxSources($version)) {
             $success = Setup::buildSphinx($version, $output);

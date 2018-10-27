@@ -14,6 +14,7 @@
 
 namespace Causal\Sphinx\Slots;
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -31,19 +32,19 @@ class SphinxDocumentation
 
     /**
      * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $objectManager;
 
     /**
      * @var \Causal\Sphinx\Domain\Repository\ExtensionRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $extensionRepository;
 
     /**
      * @var \Causal\Sphinx\Domain\Repository\ProjectRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $projectRepository;
 
@@ -181,7 +182,7 @@ class SphinxDocumentation
         }
         $formats = array('html', 'json');
 
-        $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sphinx']);
+        $configuration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('sphinx');
         switch ($configuration['pdf_builder']) {
             case 'pdflatex':
                 $renderPdf = \TYPO3\CMS\Core\Utility\CommandUtility::getCommand('pdflatex') !== '';

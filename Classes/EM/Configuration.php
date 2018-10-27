@@ -14,6 +14,7 @@
 
 namespace Causal\Sphinx\EM;
 
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\CommandUtility;
 use Causal\Sphinx\Utility\Setup;
@@ -89,7 +90,7 @@ class Configuration
                 $scriptFilename = $sphinxPath . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . $script;
                 $scriptVersion = $script . '-' . $selectedVersion;
 
-                if (TYPO3_OS === 'WIN') {
+                if (Environment::isWindows()) {
                     $scriptFilename .= '.bat';
                     $scriptVersion .= '.bat';
 
@@ -214,7 +215,7 @@ JS;
             $out[] = '<label for="sphinx_plugin_' . $i . '" style="display:inline"><strong>' . $label . '</strong></label>';
             if ($plugin['docst3o']) {
                 // Plugin is available on docs.typo3.org
-                $imaget3o = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($this->extKey) .
+                $imaget3o = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($this->extKey) .
                     'Resources/Public/Images/docst3o.png';
                 $label = 'Plugin is available on docs.typo3.org';
                 $out[] = sprintf(
