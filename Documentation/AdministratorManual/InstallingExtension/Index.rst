@@ -58,7 +58,8 @@ is stored as :file:`typo3temp/tx_sphinx/IMPORT-{date}.log`. The general process 
 #. Fetch the version as a zip archive from https://github.com/sphinx-doc/sphinx/releases into
    directory :file:`typo3temp/`
 
-#. Unpack the zip archive into directory :file:`uploads/tx_sphinx/{version}/`
+#. Unpack the zip archive into directory :file:`uploads/tx_sphinx/{version}/` (name of the folder should be for instance
+   :file:`v1.8.1`)
 
 #. Build the Python libraries into directory :file:`typo3temp/tx_sphinx/sphinx-doc/{version}/`
 
