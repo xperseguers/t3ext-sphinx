@@ -20,7 +20,8 @@ You have thought of better user experience? Great!
 		:alt: A single address
 
 .. note::
-	Please use the extension's bug tracker on Forge to propose new features: https://forge.typo3.org/projects/extension-sphinx/issues
+	Please use the extension's bug tracker on GitHub to propose new features:
+	https://github.com/xperseguers/t3ext-sphinx/issues
 
 
 Translation

@@ -65,4 +65,4 @@ Problèmes connus
 
 .. note::
 	Veuillez svp utiliser le système de suivi de bogues de l'extension sur Forge pour rapporter de nouveaux bogues :
-	https://forge.typo3.org/projects/extension-sphinx/issues
+	https://github.com/xperseguers/t3ext-sphinx/issues

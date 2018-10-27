@@ -20,8 +20,8 @@ disposer d'une fonction de fou ? Vous avez pensé à une meilleure expérience u
 		:alt: Une seule adresse
 
 .. note::
-	Veuillez svp utiliser le système de suivi de bogues de l'extension sur Forge pour proposer de nouvelles
-	fonctionnalités : https://forge.typo3.org/projects/extension-sphinx/issues
+	Veuillez svp utiliser le système de suivi de bogues de l'extension sur GitHub pour proposer de nouvelles
+	fonctionnalités : https://github.com/xperseguers/t3ext-sphinx/issues
 
 
 Traduction

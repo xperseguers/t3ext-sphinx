@@ -12,10 +12,13 @@ Links
 -----
 
 :TER:
-	https://typo3.org/extensions/repository/view/<extension key>
+	https://extensions.typo3.org/extension/<extension key>
+
+:Packagist:
+	https://packagist.org/packages/<vendor>/<extension key>
 
 :Bug Tracker:
-	https://forge.typo3.org/projects/extension-<extension key>/issues
+	https://github.com/<username>/<etension key>/issues
 
 :Git Repository:
 	https://github.com/<username>/<extension key>

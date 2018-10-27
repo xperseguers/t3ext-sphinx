@@ -531,7 +531,7 @@ conf.py:
     - https://forge.typo3.org/issues/%s
     - 'forge: '
     ter:
-    - https://typo3.org/extensions/repository/view/%s
+    - https://extensions.typo3.org/extension/%s
     - null
 YAML;
         GeneralUtility::writeFile($fixtureFilename, $yaml);
@@ -541,7 +541,7 @@ YAML;
         $expected = array(
             'extlinks = {' . LF .
             "'forge': ('https://forge.typo3.org/issues/%s', 'forge: ')," . LF .
-            "'ter': ('https://typo3.org/extensions/repository/view/%s', None)" . LF .
+            "'ter': ('https://extensions.typo3.org/extension/%s', None)" . LF .
             '}',
         );
         $this->assertSame($expected, $pythonConfiguration);

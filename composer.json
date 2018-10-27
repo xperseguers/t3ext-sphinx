@@ -9,9 +9,9 @@
     "LaTeX",
     "documentation"
   ],
-  "homepage": "https://forge.typo3.org/projects/extension-sphinx",
+  "homepage": "https://github.com/xperseguers/t3ext-sphinx",
   "support": {
-    "issues": "https://forge.typo3.org/projects/extension-sphinx/issues"
+    "issues": "https://github.com/xperseguers/t3ext-sphinx/issues"
   },
   "authors": [
     {
