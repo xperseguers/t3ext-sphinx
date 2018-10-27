@@ -1253,12 +1253,12 @@ EOT;
         $versions = [];
         // for some reason the releases API does not yield any results, so we use the tags API
         $rawJson = MiscUtility::getUrlWithCache('https://api.github.com/repos/sphinx-doc/sphinx/tags');
-        $json = \json_decode($rawJson);
+        $tags = json_decode($rawJson, true);
 
-        foreach($json as $tag) {
-            $key = $tag->{'name'};
+        foreach ($tags as $tag) {
+            $key = $tag['name'];
             $name = $key;
-            $url = $tag->{'zipball_url'};
+            $url = $tag['zipball_url'];
 
             // Make sure main release (e.g., "1.2") gets a ".0" patch release version as well
             if (preg_match('/^\d+\.\d+$/', $name)) {
