@@ -47,7 +47,7 @@ class IncludeMessagesViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\Abstrac
             return substr($item, 0, strlen($keyPrefix)) === $keyPrefix;
         });
 
-        $messages = array();
+        $messages = [];
         foreach ($keys as $key) {
             $messages[$key] = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($key, 'sphinx');
         }

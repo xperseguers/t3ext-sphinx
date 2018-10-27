@@ -2,7 +2,7 @@
 defined('TYPO3_MODE') || die();
 
 $textFileExtensions = explode(',', $GLOBALS['TYPO3_CONF_VARS']['SYS']['textfile_ext']);
-$textFileExtensions = array_merge($textFileExtensions, array('json', 'py', 'rst', 'yml'));
+$textFileExtensions = array_merge($textFileExtensions, ['json', 'py', 'rst', 'yml']);
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['textfile_ext'] = implode(',', array_unique($textFileExtensions));
 
 /** @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher */

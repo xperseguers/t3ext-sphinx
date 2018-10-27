@@ -43,21 +43,21 @@ class Configuration
      */
     public function getVersions(array $params, \TYPO3\CMS\Extensionmanager\ViewHelpers\Form\TypoScriptConstantsViewHelper $pObj)
     {
-        $out = array();
+        $out = [];
         $globalVersion = null;
 
         $sphinxPath = GeneralUtility::getFileAbsFileName('typo3temp/tx_sphinx/sphinx-doc');
-        $versions = array();
+        $versions = [];
         if (is_dir($sphinxPath)) {
             $versions = GeneralUtility::get_dirs($sphinxPath);
         }
-        $versions = array_diff($versions, array('bin'));
+        $versions = array_diff($versions, ['bin']);
 
         // Maybe a global install of Sphinx is available
         $sphinxBuilder = CommandUtility::getCommand('sphinx-build');
         // Do not resolve symbolic link here, no need if after all one wants to link to a local version of sphinx-build
         if ($sphinxBuilder && !GeneralUtility::isFirstPartOfStr($$sphinxBuilder, $sphinxPath)) {
-            $output = array();
+            $output = [];
             CommandUtility::exec(escapeshellarg($sphinxBuilder) . ' --version 2>&1', $output);
             $versionLine = $output[0];
             $versionParts = explode(' ', $versionLine);
@@ -80,10 +80,10 @@ class Configuration
         if ($selectedVersion && $selectedVersion !== 'SYSTEM' && is_dir($sphinxPath . '/bin')) {
             // Recreate the shortcut links to selected version
             // /path/to/sphinx-doc/sphinx-build -> /path/to/sphinx-doc/sphinx-build-1.2b1
-            $scripts = array(
+            $scripts = [
                 'sphinx-build',
                 'sphinx-quickstart',
-            );
+            ];
             chdir($sphinxPath . '/bin');
             foreach ($scripts as $script) {
                 $scriptFilename = $sphinxPath . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . $script;
@@ -134,7 +134,7 @@ class Configuration
             $i++;
         }
 
-        $fieldId = str_replace(array('[', ']'), '_', $params['fieldName']);
+        $fieldId = str_replace(['[', ']'], '_', $params['fieldName']);
         $out[] = '<script type="text/javascript">';
         $out[] = <<<JS
 
@@ -163,7 +163,7 @@ JS;
      */
     public function getPlugins(array $params, \TYPO3\CMS\Extensionmanager\ViewHelpers\Form\TypoScriptConstantsViewHelper $pObj)
     {
-        $out = array();
+        $out = [];
         $plugins = Setup::getAvailableThirdPartyPlugins();
 
         $out[] = '<div class="typo3-message message-warning">';
@@ -183,9 +183,9 @@ JS;
             'sphinx',
             'UpdateScript',
             'show',
-            array(
+            [
                 'operation' => 'BUILD-' . $sphinxVersion,
-            )
+            ]
         );
         $out[] = sprintf('Please <a href="%s">rebuild your Sphinx environment</a> after activating plugins.', $emLink);
         $out[] = '</div>';
@@ -194,7 +194,7 @@ JS;
         $selectedPlugins = GeneralUtility::trimExplode(',', $params['fieldValue'], true);
 
         // First show plugins available on docs.typo3.org, then the others
-        $sortedPlugins = array('start' => array(), 'end' => array());
+        $sortedPlugins = ['start' => [], 'end' => []];
         foreach ($plugins as $plugin) {
             if ($plugin['docst3o']) {
                 $sortedPlugins['start'][] = $plugin;
@@ -232,7 +232,7 @@ JS;
             $i++;
         }
 
-        $fieldId = str_replace(array('[', ']'), '_', $params['fieldName']);
+        $fieldId = str_replace(['[', ']'], '_', $params['fieldName']);
         $out[] = '<script type="text/javascript">';
         $out[] = <<<JS
 

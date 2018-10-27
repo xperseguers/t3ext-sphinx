@@ -57,7 +57,7 @@ class MiscUtility
     public static function getExtensionMetaData($extensionKey)
     {
         $_EXTKEY = $extensionKey;
-        $EM_CONF = array();
+        $EM_CONF = [];
         $extPath = static::extPath($extensionKey);
         include($extPath . 'ext_emconf.php');
 
@@ -124,11 +124,11 @@ class MiscUtility
      */
     public static function getDocumentationTypes($extensionKey)
     {
-        $supportedDocuments = array(
+        $supportedDocuments = [
             'Documentation/Index.rst' => static::DOCUMENTATION_TYPE_SPHINX,
             'README.rst' => static::DOCUMENTATION_TYPE_README,
             'doc/manual.sxw' => static::DOCUMENTATION_TYPE_OPENOFFICE,
-        );
+        ];
         $extPath = static::extPath($extensionKey);
 
         $types = static::DOCUMENTATION_TYPE_UNKNOWN;
@@ -151,10 +151,10 @@ class MiscUtility
      */
     public static function getLocalizationDirectories($extensionKey)
     {
-        static $localizationDirectories = array();
+        static $localizationDirectories = [];
 
         if (!isset($localizationDirectories[$extensionKey])) {
-            $localizationDirectories[$extensionKey] = array();
+            $localizationDirectories[$extensionKey] = [];
 
             $pattern = 'Documentation/Localization.*';
             $supportedLocales = \Causal\Sphinx\Utility\SphinxBuilder::getSupportedLocales();
@@ -162,7 +162,7 @@ class MiscUtility
             $directories = glob($extPath . $pattern);
             if ($directories === false) {
                 // An error occured
-                $directories = array();
+                $directories = [];
             }
 
             foreach ($directories as $directory) {
@@ -172,20 +172,20 @@ class MiscUtility
 
                     foreach ($supportedLocales as $locale => $_) {
                         if (strpos($locale, '_') === false && $matches[1] === $locale) {
-                            $localizationDirectories[$extensionKey][$locale] = array(
+                            $localizationDirectories[$extensionKey][$locale] = [
                                 'directory' => $directory,
                                 'locale' => $localizationLocale,
-                            );
-                            $localizationDirectories[$extensionKey][$localizationLocale] = array(
+                            ];
+                            $localizationDirectories[$extensionKey][$localizationLocale] = [
                                 'directory' => $directory,
                                 'locale' => $localizationLocale,
-                            );
+                            ];
                             break;
                         } elseif ($localizationLocale === $locale) {
-                            $localizationDirectories[$extensionKey][$locale] = array(
+                            $localizationDirectories[$extensionKey][$locale] = [
                                 'directory' => $directory,
                                 'locale' => $localizationLocale,
-                            );
+                            ];
                             break;
                         }
                     }
@@ -333,16 +333,16 @@ HTML;
             // #3: </div>
             // #4: to the end
             if ($matches[3] === '</div>') {
-                $listOfLabels = array();
+                $listOfLabels = [];
                 $listOfLabels[] = '<dl class="ref-targets-list docutils">';
 
                 // Clean up references
-                foreach (array('0', 'search', 'py-modindex') as $file) {
+                foreach (['0', 'search', 'py-modindex'] as $file) {
                     unset($references[$file]);
                 }
 
                 // Move 1st-level references at the beginning
-                $tempReferences = array();
+                $tempReferences = [];
                 foreach ($references as $file => $anchors) {
                     if (strpos($file, '/') === false) {
                         $tempReferences[$file] = $anchors;
@@ -355,7 +355,7 @@ HTML;
                     $listOfLabels[] = '<dd><ul class="first last simple">';
 
                     // Prepare retrieval of line numbers for anchors
-                    $lines = array();
+                    $lines = [];
                     $isGeneralIndex = ($file === 'genindex');
                     if (!$isGeneralIndex) {
                         $source = '_sources/' . $file . '.txt';
@@ -427,11 +427,11 @@ HTML;
         $officialDocuments = $documentationRepository->getOfficialDocuments();
 
         // Not an official "document" but still...
-        $officialDocuments[] = array(
+        $officialDocuments[] = [
             'key' => 'typo3cms.api.t3cmsapi',
             'shortcut' => 't3cmsapi',
             'url' => 'https://typo3.org/api/typo3cms/',
-        );
+        ];
 
         $reference = null;
         foreach ($officialDocuments as $officialDocument) {
@@ -493,7 +493,7 @@ HTML;
             'last_updated'
         );
 
-        $mapping = array();
+        $mapping = [];
         foreach ($rows as $row) {
             $key = str_replace('_', '', $row['extension_key']);
             $mapping[$key] = $row['extension_key'];
@@ -571,7 +571,7 @@ HTML;
             $sphinxReader->setPath($path);
             $references = $sphinxReader->getReferences();
         } else {
-            $references = array();
+            $references = [];
         }
 
         return $references;
@@ -651,7 +651,7 @@ HTML;
         $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$extKey]);
         $synchronizeFileExtensions = !empty($configuration['rsync_files'])
             ? GeneralUtility::trimExplode(',', $configuration['rsync_files'], true)
-            : array();
+            : [];
 
         /** @var \Causal\Sphinx\Utility\RsyncUtility $rsyncUtility */
         $rsyncUtility = GeneralUtility::makeInstance(\Causal\Sphinx\Utility\RsyncUtility::class);
@@ -711,7 +711,7 @@ HTML;
                 $extensionPath = static::extPath($extensionKey);
                 $source = $extensionPath . 'README.rst';
                 copy($source, $basePath . '/Index.rst');
-                $resourceDirectories = array('Documentation', 'Resources');
+                $resourceDirectories = ['Documentation', 'Resources'];
                 foreach ($resourceDirectories as $resourceDirectory) {
                     if (is_dir($extensionPath . $resourceDirectory)) {
                         GeneralUtility::mkdir($basePath . '/' . $resourceDirectory);
@@ -740,7 +740,7 @@ HTML;
         }
 
         try {
-            $tags = array();
+            $tags = [];
             $useCache = !empty($synchronizeFileExtensions);
 
             if ($format === 'json') {
@@ -873,13 +873,13 @@ HTML;
             return false;
         }
         $warningsLines = explode(LF, file_get_contents($warningsFilename));
-        $prefixes = array();
+        $prefixes = [];
         $intersphinxMappingUpdated = false;
 
         foreach ($warningsLines as $warningLine) {
             if (preg_match('/ WARNING: undefined label: ([^:]+):/', $warningLine, $matches)) {
                 $remoteUrl = '';
-                $additionalInformation = array();
+                $additionalInformation = [];
                 $prefix = $matches[1];
                 if (in_array($prefix, $prefixes)) {
                     continue;
@@ -918,11 +918,11 @@ HTML;
         $t3sphinxImportPattern = '/^(\s*)import\s+t3sphinx\s*$/m';
 
         if (preg_match($t3sphinxImportPattern, $configuration, $matches)) {
-            $imports = array(
+            $imports = [
                 'from docutils.parsers.rst import directives',
                 'from t3sphinx import fieldlisttable',
                 'directives.register_directive(\'t3-field-list-table\', fieldlisttable.FieldListTable)',
-            );
+            ];
             $replacement = $matches[1] . implode(LF . $matches[1], $imports);
             $newConfiguration = preg_replace($t3sphinxImportPattern, $replacement, $configuration);
 
@@ -1011,7 +1011,7 @@ YAML;
 
         $contents = file_get_contents($filename);
         // Fix line breaks if needed as we rely on Linux line breaks
-        $contents = str_replace(array(CR . LF, CR), LF, $contents);
+        $contents = str_replace([CR . LF, CR], LF, $contents);
         $lines = explode(LF, $contents);
         $isDirty = false;
 
@@ -1034,9 +1034,9 @@ YAML;
                 $endLines = array_slice($lines, $startLine);
                 $lines = array_merge(
                     $startLines,
-                    array(
+                    [
                         $indent . 'intersphinx_mapping:'
-                    ),
+                    ],
                     $endLines
                 );
             } else {
@@ -1059,11 +1059,11 @@ YAML;
             $endLines = array_slice($lines, $startLine + 1);
             $lines = array_merge(
                 $startLines,
-                array(
+                [
                     $indent . $indent . $identifier . ':',
                     $indent . $indent . '- ' . rtrim($target, '/') . '/',
                     $indent . $indent . '- null',
-                ),
+                ],
                 $endLines
             );
             $isDirty = true;
@@ -1098,7 +1098,7 @@ YAML;
         $indent = '  ';
         $contents = file_get_contents($filename);
         // Fix line breaks if needed as we rely on Linux line breaks
-        $contents = str_replace(array(CR . LF, CR), LF, $contents);
+        $contents = str_replace([CR . LF, CR], LF, $contents);
         $lines = explode(LF, $contents);
         $isDirty = false;
 
@@ -1156,7 +1156,7 @@ YAML;
     {
         $contents = file_get_contents($filename);
         $lines = explode(LF, $contents);
-        $pythonConfiguration = array();
+        $pythonConfiguration = [];
 
         // Remove empty lines and comments
         $lines = array_values(array_filter($lines, function ($line) {
@@ -1388,7 +1388,7 @@ YAML;
             try {
                 $availableAndInstalledExtensions = static::getListUtility()->getAvailableAndInstalledExtensionsWithAdditionalInformation();
             } catch (\Exception $e) {
-                $availableAndInstalledExtensions = array();
+                $availableAndInstalledExtensions = [];
             }
         }
         if (isset($availableAndInstalledExtensions[$extensionKey])) {
@@ -1439,7 +1439,7 @@ YAML;
      * @param array $additionalUrlParameters
      * @return string
      */
-    public static function getExtensionManagerLink($extensionKey = '', $controller = '', $action = '', array $additionalUrlParameters = array())
+    public static function getExtensionManagerLink($extensionKey = '', $controller = '', $action = '', array $additionalUrlParameters = [])
     {
         $namespace = 'tx_extensionmanager_tools_extensionmanagerextensionmanager';
         $moduleName = 'tools_ExtensionmanagerExtensionmanager';

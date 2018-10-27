@@ -48,8 +48,8 @@ class ExtensionRepository implements \TYPO3\CMS\Core\SingletonInterface
     public function findByHasNoDocumentation($allowedInstallTypes = 'G,L')
     {
         $availableAndInstalledExtensions = $this->listUtility->getAvailableAndInstalledExtensionsWithAdditionalInformation();
-        $extensions = array();
-        $titles = array();
+        $extensions = [];
+        $titles = [];
 
         foreach ($availableAndInstalledExtensions as $extensionKey => $info) {
             if (!GeneralUtility::inList($allowedInstallTypes, $info['type']{0})) {
@@ -77,8 +77,8 @@ class ExtensionRepository implements \TYPO3\CMS\Core\SingletonInterface
     public function findByHasSphinxDocumentation($allowedInstallTypes = 'S,G,L')
     {
         $availableAndInstalledExtensions = $this->listUtility->getAvailableAndInstalledExtensionsWithAdditionalInformation();
-        $extensions = array();
-        $titles = array();
+        $extensions = [];
+        $titles = [];
 
         foreach ($availableAndInstalledExtensions as $extensionKey => $info) {
             if (!GeneralUtility::inList($allowedInstallTypes, $info['type']{0})) {
@@ -135,8 +135,8 @@ class ExtensionRepository implements \TYPO3\CMS\Core\SingletonInterface
     public function findByHasOpenOffice($allowedInstallTypes = 'G,L')
     {
         $availableAndInstalledExtensions = $this->listUtility->getAvailableAndInstalledExtensionsWithAdditionalInformation();
-        $extensions = array();
-        $titles = array();
+        $extensions = [];
+        $titles = [];
 
         foreach ($availableAndInstalledExtensions as $extensionKey => $info) {
             if (!GeneralUtility::inList($allowedInstallTypes, $info['type']{0})) {
@@ -172,8 +172,8 @@ class ExtensionRepository implements \TYPO3\CMS\Core\SingletonInterface
                 return "'" . $e . "'";
             }, $extensionKeys)) .
             ' AND ' . $this->getDatabaseConnection()->searchQuery(
-                array($searchTerm),
-                array('extension_key', 'title', 'description'),
+                [$searchTerm],
+                ['extension_key', 'title', 'description'],
                 $extensionTable
             ),
             '',
@@ -191,10 +191,10 @@ class ExtensionRepository implements \TYPO3\CMS\Core\SingletonInterface
                 || stripos($extension['description'], $searchTerm) !== false
             ) {
 
-                $extensions[$extension['extensionKey']] = array(
+                $extensions[$extension['extensionKey']] = [
                     'extension_key' => $extension['extensionKey'],
                     'title' => $extension['title']
-                );
+                ];
             }
         }
 
@@ -214,51 +214,51 @@ class ExtensionRepository implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected function getSystemExtensionsWithSphinxDocumentation()
     {
-        $extensions = array();
-        $extensions[] = array(
+        $extensions = [];
+        $extensions[] = [
             'extensionKey' => 'css_styled_content',
             'title' => 'CSS styled content',
             'description' => 'Contains configuration for CSS content-rendering of the table "tt_content". ' .
                 'This is meant as a modern substitute for the classic "content (default)" template which was based ' .
                 'more on <font>-tags, while this is pure CSS. It is intended to work with all modern browsers (which ' .
                 'excludes the NS4 series).',
-        );
-        $extensions[] = array(
+        ];
+        $extensions[] = [
             'extensionKey' => 'dbal',
             'title' => 'Database Abstraction Layer',
             'description' => 'A database abstraction layer implementation for TYPO3 4.6 based on ADOdb and offering ' .
                 'a lot of other features.',
-        );
-        $extensions[] = array(
+        ];
+        $extensions[] = [
             'extensionKey' => 'felogin',
             'title' => 'Frontend Login for Website Users',
             'description' => 'A template-based plugin to log in Website Users in the Frontend',
-        );
-        $extensions[] = array(
+        ];
+        $extensions[] = [
             'extensionKey' => 'form',
             'title' => 'Form',
             'description' => 'Form Library, Plugin and Wizard',
-        );
-        $extensions[] = array(
+        ];
+        $extensions[] = [
             'extensionKey' => 'indexed_search',
             'title' => 'Indexed Search Engine',
             'description' => 'Indexed Search Engine for TYPO3 pages, PDF-files, Word-files, HTML and text files. ' .
                 'Provides a backend module for statistics of the indexer and a frontend plugin. Documentation can be ' .
                 'found in the extension "doc_indexed_search".',
-        );
-        $extensions[] = array(
+        ];
+        $extensions[] = [
             'extensionKey' => 'linkvalidator',
             'title' => 'Link Validator',
             'description' => 'Link Validator checks the links in your website for validity. It can validate all ' .
                 'kinds of links: internal, external and file links. Scheduler is supported to run Link Validator via ' .
                 'Cron including the option to send status mails, if broken links were detected.',
-        );
-        $extensions[] = array(
+        ];
+        $extensions[] = [
             'extensionKey' => 'openid',
             'title' => 'OpenID authentication',
             'description' => 'Adds OpenID authentication to TYPO3',
-        );
-        $extensions[] = array(
+        ];
+        $extensions[] = [
             'extensionKey' => 'recycler',
             'title' => 'Recycler',
             'description' => 'The recycler offers the possibility to restore deleted records or remove them from ' .
@@ -266,46 +266,46 @@ class ExtensionRepository implements \TYPO3\CMS\Core\SingletonInterface
                 'recursively to child records (ex. restoring a page can restore all content elements on that page). ' .
                 'Filtering by page and by table provides a quick overview of deleted records before taking action ' .
                 'on them.',
-        );
-        $extensions[] = array(
+        ];
+        $extensions[] = [
             'extensionKey' => 'rsaauth',
             'title' => 'RSA authentication for TYPO3',
             'description' => 'Contains a service to authenticate TYPO3 BE and FE users using private/public key ' .
                 'encryption of passwords',
-        );
-        $extensions[] = array(
+        ];
+        $extensions[] = [
             'extensionKey' => 'rtehtmlarea',
             'title' => 'htmlArea RTE',
             'description' => 'Rich Text Editor.',
-        );
-        $extensions[] = array(
+        ];
+        $extensions[] = [
             'extensionKey' => 'saltedpasswords',
             'title' => 'Salted user password hashes',
             'description' => 'Uses a password hashing framework for storing passwords. Integrates into the system ' .
                 'extension "felogin". Use SSL or rsaauth to secure datatransfer! Please read the manual first!',
-        );
-        $extensions[] = array(
+        ];
+        $extensions[] = [
             'extensionKey' => 'scheduler',
             'title' => 'Scheduler',
             'description' => 'The TYPO3 Scheduler let\'s you register tasks to happen at a specific time',
-        );
-        $extensions[] = array(
+        ];
+        $extensions[] = [
             'extensionKey' => 'sys_action',
             'title' => 'User>Task Center, Actions',
             'description' => 'Actions are \'programmed\' admin tasks which can be performed by selected regular ' .
                 'users from the Task Center. An action could be creation of backend users, fixed SQL SELECT queries, ' .
                 'listing of records, direct edit access to selected records etc.',
-        );
-        $extensions[] = array(
+        ];
+        $extensions[] = [
             'extensionKey' => 'taskcenter',
             'title' => 'User>Task Center',
             'description' => 'The Task Center is the framework for a host of other extensions, see below.',
-        );
-        $extensions[] = array(
+        ];
+        $extensions[] = [
             'extensionKey' => 'workspaces',
             'title' => 'Workspaces Management',
             'description' => 'Adds workspaces functionality with custom stages to TYPO3.',
-        );
+        ];
 
         return $extensions;
     }
@@ -352,7 +352,7 @@ class ExtensionRepository implements \TYPO3\CMS\Core\SingletonInterface
     protected function getSafeInClause($column, array $values)
     {
         $chunkSize = 1000;
-        $clauses = array();
+        $clauses = [];
 
         while (count($values) > 0) {
             $chunk = array_slice($values, 0, $chunkSize);

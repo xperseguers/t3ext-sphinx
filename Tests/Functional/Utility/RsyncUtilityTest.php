@@ -61,9 +61,9 @@ class RsyncUtilityTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
      */
     public function fileExtensionsAreMadeUnique()
     {
-        $extensions = array('png', 'PNG', 'gif', 'jpg', '.jpg', '.GIF');
+        $extensions = ['png', 'PNG', 'gif', 'jpg', '.jpg', '.GIF'];
 
-        $expected = array('gif', 'jpg', 'png');
+        $expected = ['gif', 'jpg', 'png'];
         $actual = $this->rsyncUtility->setFileExtensions($extensions);
 
         $this->assertSame($expected, $actual);
@@ -76,11 +76,11 @@ class RsyncUtilityTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     {
         $files = $this->rsyncUtility->getFilesRecursively($this->fixturesPath);
 
-        $expected = array(
-            array('file' => 'images/image1.png', 'md5' => 'edff2af19b9221bd7b9e4c9b2a7fa0e8'),
-            array('file' => 'images/image2.png', 'md5' => '8a809ea6c905eafdced353bf88368158'),
-            array('file' => 'sample.rst', 'md5' => 'a60319cd0397d5c9bcc0652f9a54c56c'),
-        );
+        $expected = [
+            ['file' => 'images/image1.png', 'md5' => 'edff2af19b9221bd7b9e4c9b2a7fa0e8'],
+            ['file' => 'images/image2.png', 'md5' => '8a809ea6c905eafdced353bf88368158'],
+            ['file' => 'sample.rst', 'md5' => 'a60319cd0397d5c9bcc0652f9a54c56c'],
+        ];
 
         $this->assertSame($expected, array_values($files));
     }
@@ -90,13 +90,13 @@ class RsyncUtilityTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
      */
     public function canRetrieveImagesInDirectory()
     {
-        $this->rsyncUtility->setFileExtensions(array('png'));
+        $this->rsyncUtility->setFileExtensions(['png']);
         $files = $this->rsyncUtility->getFilesRecursively($this->fixturesPath);
 
-        $expected = array(
-            array('file' => 'images/image1.png', 'md5' => 'edff2af19b9221bd7b9e4c9b2a7fa0e8'),
-            array('file' => 'images/image2.png', 'md5' => '8a809ea6c905eafdced353bf88368158'),
-        );
+        $expected = [
+            ['file' => 'images/image1.png', 'md5' => 'edff2af19b9221bd7b9e4c9b2a7fa0e8'],
+            ['file' => 'images/image2.png', 'md5' => '8a809ea6c905eafdced353bf88368158'],
+        ];
 
         $this->assertSame($expected, array_values($files));
     }
@@ -107,7 +107,7 @@ class RsyncUtilityTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     public function noMissingFilesWhenComparingSameDirectory()
     {
         $files = $this->rsyncUtility->getMissingFilesInTarget($this->fixturesPath, $this->fixturesPath);
-        $expected = array();
+        $expected = [];
 
         $this->assertSame($expected, $files);
     }
@@ -118,11 +118,11 @@ class RsyncUtilityTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     public function everyFileIsMissingInEmptyDirectory()
     {
         $files = $this->rsyncUtility->getMissingFilesInTarget($this->fixturesPath, $this->temporaryPath);
-        $expected = array(
-            array('file' => 'images/image1.png', 'md5' => 'edff2af19b9221bd7b9e4c9b2a7fa0e8'),
-            array('file' => 'images/image2.png', 'md5' => '8a809ea6c905eafdced353bf88368158'),
-            array('file' => 'sample.rst', 'md5' => 'a60319cd0397d5c9bcc0652f9a54c56c'),
-        );
+        $expected = [
+            ['file' => 'images/image1.png', 'md5' => 'edff2af19b9221bd7b9e4c9b2a7fa0e8'],
+            ['file' => 'images/image2.png', 'md5' => '8a809ea6c905eafdced353bf88368158'],
+            ['file' => 'sample.rst', 'md5' => 'a60319cd0397d5c9bcc0652f9a54c56c'],
+        ];
 
         $this->assertSame($expected, array_values($files));
     }
@@ -151,10 +151,10 @@ class RsyncUtilityTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
         GeneralUtility::writeFile($this->temporaryPath . 'sample.rst', 'Modified content');
 
         $files = $this->rsyncUtility->getModifiedFiles($this->fixturesPath, $this->temporaryPath);
-        $expected = array(
+        $expected = [
             'images/image2.png',
             'sample.rst',
-        );
+        ];
 
         $this->assertSame($expected, $files);
     }
@@ -186,14 +186,14 @@ class RsyncUtilityTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
      * @return array
      */
     protected function createExtraFiles() {
-        $extraFiles = array();
+        $extraFiles = [];
 
         for ($i = 0; $i < 3; $i++) {
             $content = 'This is extra file #' . $i;
-            $extraFile = array(
+            $extraFile = [
                 'file' => 'foo/bar-' . $i . '.txt',
                 'md5' => md5($content),
-            );
+            ];
 
             GeneralUtility::mkdir($this->temporaryPath . dirname($extraFile['file']));
             GeneralUtility::writeFile($this->temporaryPath . $extraFile['file'], $content);

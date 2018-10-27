@@ -52,9 +52,9 @@ class SelectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelpe
     protected function getOptions()
     {
         if (!is_array($this->arguments['options']) && !$this->arguments['options'] instanceof \Traversable) {
-            return array();
+            return [];
         }
-        $options = array();
+        $options = [];
         $optionsArgument = $this->arguments['options'];
         foreach ($optionsArgument as $key => $value) {
             // Additional test for $this->hasArgument below is what is different with parent method

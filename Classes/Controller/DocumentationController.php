@@ -78,16 +78,16 @@ class DocumentationController extends AbstractActionController
         } else {
             $contentActionUrl = $this->uriBuilder->uriFor(
                 'render',
-                array(
+                [
                     'reference' => $currentReference,
                     'document' => $document,
                     'layout' => $currentLayout,
                     'force' => $force,
-                )
+                ]
             );
         }
 
-        $this->view->assignMultiple(array(
+        $this->view->assignMultiple([
             'references' => $references,
             'layouts' => $layouts,
             'force' => $force,
@@ -95,7 +95,7 @@ class DocumentationController extends AbstractActionController
             'currentLayout' => $currentLayout,
             'contentActionUrl' => $contentActionUrl,
             'typo3_8x' => version_compare(TYPO3_branch, '8', '>='),
-        ));
+        ]);
     }
 
     /**
@@ -109,13 +109,13 @@ class DocumentationController extends AbstractActionController
         $extensionWithOpenOfficeDocumentation = $this->extensionRepository->findByHasOpenOffice('G,L');
         $customProjects = $this->projectRepository->findAll();
 
-        $this->view->assignMultiple(array(
+        $this->view->assignMultiple([
             'extensionsEmpty' => $extensionsWithoutDocumentation,
             'extensionsOpenOffice' => $extensionWithOpenOfficeDocumentation,
             'customProjects' => $customProjects,
             'layout' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('restdoc') ? 'json' : 'html',
             'typo3_8x' => version_compare(TYPO3_branch, '8', '>='),
-        ));
+        ]);
     }
 
     /**
@@ -141,12 +141,12 @@ class DocumentationController extends AbstractActionController
                 $this->signalSlotDispatcher->dispatch(
                     __CLASS__,
                     'renderUserDocumentation',
-                    array(
+                    [
                         'identifier' => $identifier,
                         'layout' => $layout,
                         'force' => $force,
                         'documentationUrl' => &$documentationUrl,
-                    )
+                    ]
                 );
                 if ($documentationUrl === null) {
                     throw new \RuntimeException('No slot found to render documentation with identifier "' . $identifier . '"', 1371208253);
@@ -178,11 +178,11 @@ class DocumentationController extends AbstractActionController
                 'render',
                 'InteractiveViewer',
                 null,
-                array(
+                [
                     'reference' => $reference,
                     'document' => $document,
                     'documentationFilename' => $documentationFilename
-                )
+                ]
             );
         }
 
@@ -237,7 +237,7 @@ class DocumentationController extends AbstractActionController
         }
 
         // Open converted documentation
-        $this->redirect('index', null, null, array('reference' => $reference));
+        $this->redirect('index', null, null, ['reference' => $reference]);
     }
 
     /**
@@ -280,7 +280,7 @@ class DocumentationController extends AbstractActionController
         }
 
         // Open freshly created documentation
-        $this->redirect('index', null, null, array('reference' => $reference));
+        $this->redirect('index', null, null, ['reference' => $reference]);
     }
 
     /**
@@ -291,7 +291,7 @@ class DocumentationController extends AbstractActionController
     protected function getReferences()
     {
         $extensions = $this->extensionRepository->findByHasSphinxDocumentation();
-        $references = array();
+        $references = [];
         foreach ($extensions as $extension) {
             $typeLabel = $this->translate('extensionType_' . $extension->getInstallType());
             $references[$typeLabel]['EXT:' . $extension->getExtensionKey()] = sprintf('[%2$s] %1$s', $extension->getTitle(), $extension->getExtensionKey());
@@ -300,9 +300,9 @@ class DocumentationController extends AbstractActionController
         $this->signalSlotDispatcher->dispatch(
             __CLASS__,
             'afterInitializeReferences',
-            array(
+            [
                 'references' => &$references,
-            )
+            ]
         );
 
         foreach (array_keys($references) as $key) {
@@ -319,10 +319,10 @@ class DocumentationController extends AbstractActionController
      */
     public function getLayouts()
     {
-        $layouts = array(
+        $layouts = [
             'html' => $this->translate('documentationLayout_static'),
             'json' => $this->translate('documentationLayout_interactive'),
-        );
+        ];
 
         $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sphinx']);
         switch ($configuration['pdf_builder']) {

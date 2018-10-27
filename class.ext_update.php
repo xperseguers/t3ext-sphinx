@@ -66,7 +66,7 @@ class ext_update extends \TYPO3\CMS\Backend\Module\BaseScriptClass
      */
     public function main()
     {
-        $out = array();
+        $out = [];
 
         $errors = Setup::createLibraryDirectories();
         if (count($errors) > 0) {
@@ -114,7 +114,7 @@ HTML;
             list($action, $version) = explode('-', $operation, 2);
 
             if (isset($availableVersions[$version])) {
-                $messages = array();
+                $messages = [];
 
                 switch ($action) {
                     case 'DOWNLOAD':
@@ -199,7 +199,7 @@ HTML;
         $out[] = '</tr>';
 
         $installRst2Pdf = TYPO3_OS !== 'WIN' && $this->configuration['install_rst2pdf'] === '1';
-        $changes = array();
+        $changes = [];
 
         /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
         $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
@@ -274,7 +274,7 @@ HTML;
         // JSON-encoding inspired by \TYPO3\CMS\Core\Utility\GeneralUtility::quoteJSvalue()
         $json = strtr(
             json_encode($changes, JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_TAG),
-            array(
+            [
                 '"' => '\'',
                 '\\\\' => '\\u005C',
                 ' ' => '\\u0020',
@@ -282,7 +282,7 @@ HTML;
                 '\\t' => '\\u0009',
                 '\\n' => '\\u000A',
                 '\\r' => '\\u000D'
-            )
+            ]
         );
         $out[] = '<script type="text/javascript">var sphinxChanges=' . $json . ';</script>';
         $out[] = '<script src="../typo3conf/ext/sphinx/Resources/Public/JavaScript/setup.js" type="text/javascript"></script>';
@@ -534,16 +534,16 @@ HTML;
      */
     protected function getLogFiles()
     {
-        $sphinxFiles = array();
+        $sphinxFiles = [];
 
         $files = GeneralUtility::getFilesInDir(PATH_site . 'typo3temp/logs/');
         foreach ($files as $file) {
             if (preg_match('/^sphinx\.([^.]+)\.(\d{4})(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)\.log$/', $file, $matches)) {
-                $sphinxFile = array(
+                $sphinxFile = [
                     'file' => $file,
                     'type' => $matches[1],
                     'date' => mktime($matches[5], $matches[6], $matches[7], $matches[3], $matches[4], $matches[2]),
-                );
+                ];
 
                 $key = $sphinxFile['date'] . '-' . $sphinxFile['type'];
                 $sphinxFiles[$key] = $sphinxFile;

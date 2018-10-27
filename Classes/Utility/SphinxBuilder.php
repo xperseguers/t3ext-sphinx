@@ -101,7 +101,7 @@ class SphinxBuilder
         if (static::isSystemVersion()) {
             $sphinxBuilder = escapeshellarg(\TYPO3\CMS\Core\Utility\CommandUtility::getCommand('sphinx-build'));
             if ($sphinxBuilder) {
-                $output = array();
+                $output = [];
                 \TYPO3\CMS\Core\Utility\CommandUtility::exec($sphinxBuilder . ' --version 2>&1', $output);
                 $versionLine = $output[0];
                 $versionParts = explode(' ', $versionLine);
@@ -127,7 +127,7 @@ class SphinxBuilder
      * @return string Output of the build process (if succeeded)
      * @throws \RuntimeException if build process failed
      */
-    public static function buildHtml($basePath, $sourceDirectory = '.', $buildDirectory = '_build', $conf = '', $language = '', array $tags = array(), $useCache = false)
+    public static function buildHtml($basePath, $sourceDirectory = '.', $buildDirectory = '_build', $conf = '', $language = '', array $tags = [], $useCache = false)
     {
         $sphinxBuilder = static::getSphinxBuilder();
 
@@ -162,7 +162,7 @@ class SphinxBuilder
             ' ' . static::safeEscapeshellarg($buildPath) .              // build directory
             ' 2>&1';                                                    // redirect errors to STDOUT
 
-        $output = array();
+        $output = [];
         static::safeExec($cmd, $output, $ret);
         $output = implode(LF, $output);
         if (static::$htmlConsole) {
@@ -215,7 +215,7 @@ class SphinxBuilder
      * @return string Output of the build process (if succeeded)
      * @throws \RuntimeException if build process failed
      */
-    public static function buildJson($basePath, $sourceDirectory = '.', $buildDirectory = '_build', $conf = '', $language = '', array $tags = array(), $useCache = false)
+    public static function buildJson($basePath, $sourceDirectory = '.', $buildDirectory = '_build', $conf = '', $language = '', array $tags = [], $useCache = false)
     {
         $sphinxBuilder = static::getSphinxBuilder();
 
@@ -250,7 +250,7 @@ class SphinxBuilder
             ' ' . static::safeEscapeshellarg($buildPath) .              // build directory
             ' 2>&1';                                                    // redirect errors to STDOUT
 
-        $output = array();
+        $output = [];
         static::safeExec($cmd, $output, $ret);
         $output = implode(LF, $output);
         if (static::$htmlConsole) {
@@ -300,7 +300,7 @@ class SphinxBuilder
      * @return string Output of the build process (if succeeded)
      * @throws \RuntimeException if build process failed
      */
-    public static function buildLatex($basePath, $sourceDirectory = '.', $buildDirectory = '_build', $conf = '', $language = '', array $tags = array(), $useCache = false)
+    public static function buildLatex($basePath, $sourceDirectory = '.', $buildDirectory = '_build', $conf = '', $language = '', array $tags = [], $useCache = false)
     {
         $sphinxBuilder = static::getSphinxBuilder();
 
@@ -313,10 +313,10 @@ class SphinxBuilder
         $paperSize = 'a4';
         $sphinxSourcesPath = GeneralUtility::getFileAbsFileName('uploads/tx_sphinx/');
         $templatePath = $sphinxSourcesPath . 'latex.typo3/';
-        $templateFiles = array(
+        $templateFiles = [
             'typo3.sty',
             'typo3_logo_color.png',
-        );
+        ];
 
         // Compatibility with Windows platform
         $conf = str_replace('/', DIRECTORY_SEPARATOR, $conf);
@@ -344,7 +344,7 @@ class SphinxBuilder
             ' ' . static::safeEscapeshellarg($buildPath) .              // build directory
             ' 2>&1';                                                    // redirect errors to STDOUT
 
-        $output = array();
+        $output = [];
         static::safeExec($cmd, $output, $ret);
         $output = implode(LF, $output);
         if (static::$htmlConsole) {
@@ -385,14 +385,14 @@ class SphinxBuilder
             $signalSlotDispatcher->dispatch(
                 __CLASS__,
                 'afterBuildLatex',
-                array(
+                [
                     'texFileName' => $texFileName,
                     'basePath' => $basePath,
                     'sourceDirectory' => $sourceDirectory,
                     'buildDirectory' => $buildDirectory,
                     'conf' => $conf,
                     'language' => $language,
-                )
+                ]
             );
         }
 
@@ -421,7 +421,7 @@ class SphinxBuilder
      * @return string Output of the build process (if succeeded)
      * @throws \RuntimeException if build process failed
      */
-    public static function buildPdf($basePath, $sourceDirectory = '.', $buildDirectory = '_build', $conf = '', $language = '', array $tags = array(), $useCache = false)
+    public static function buildPdf($basePath, $sourceDirectory = '.', $buildDirectory = '_build', $conf = '', $language = '', array $tags = [], $useCache = false)
     {
         $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$extKey]);
 
@@ -452,7 +452,7 @@ class SphinxBuilder
      * @return string Output of the build process (if succeeded)
      * @throws \RuntimeException if build process failed
      */
-    protected static function buildPdfWithLaTeX($basePath, $sourceDirectory = '.', $buildDirectory = '_build', $conf = '', $language = '', array $tags = array(), $useCache = false)
+    protected static function buildPdfWithLaTeX($basePath, $sourceDirectory = '.', $buildDirectory = '_build', $conf = '', $language = '', array $tags = [], $useCache = false)
     {
         $make = \TYPO3\CMS\Core\Utility\CommandUtility::getCommand('make');
         $pdflatex = \TYPO3\CMS\Core\Utility\CommandUtility::getCommand('pdflatex');
@@ -512,7 +512,7 @@ class SphinxBuilder
                 ' 2>&1';    // redirect errors to STDOUT
         }
 
-        $output = array('Running LaTeX files through pdflatex...');
+        $output = ['Running LaTeX files through pdflatex...'];
         static::safeExec($cmd, $output, $ret);
         $output = implode(LF, $output);
         if (static::$htmlConsole) {
@@ -552,7 +552,7 @@ class SphinxBuilder
      * @return string Output of the build process (if succeeded)
      * @throws \RuntimeException if build process failed
      */
-    protected static function buildPdfWithRst2Pdf($basePath, $sourceDirectory = '.', $buildDirectory = '_build', $conf = '', $language = '', array $tags = array(), $useCache = false)
+    protected static function buildPdfWithRst2Pdf($basePath, $sourceDirectory = '.', $buildDirectory = '_build', $conf = '', $language = '', array $tags = [], $useCache = false)
     {
         $sphinxBuilder = static::getSphinxBuilder();
 
@@ -587,7 +587,7 @@ class SphinxBuilder
             ' ' . static::safeEscapeshellarg($buildPath) .              // build directory
             ' 2>&1';                                                    // redirect errors to STDOUT
 
-        $output = array();
+        $output = [];
         static::safeExec($cmd, $output, $ret);
         $output = implode(LF, $output);
         if (static::$htmlConsole) {
@@ -674,7 +674,7 @@ class SphinxBuilder
             ' ' . static::safeEscapeshellarg($buildPath) .              // build directory
             ' 2>&1';                                                    // redirect errors to STDOUT
 
-        $output = array();
+        $output = [];
         static::safeExec($cmd, $output, $ret);
         $output = implode(LF, $output);
         if (static::$htmlConsole) {
@@ -743,9 +743,9 @@ class SphinxBuilder
         // Compatibility with Windows platform
         $pythonPath = str_replace('/', DIRECTORY_SEPARATOR, $pythonPath);
 
-        $exports = array(
+        $exports = [
             MiscUtility::getExportCommand('PYTHONPATH', $pythonPath)
-        );
+        ];
         if (static::$htmlConsole) {
             $exports[] = MiscUtility::getExportCommand('COLORTERM', '1');
         }
@@ -782,7 +782,7 @@ class SphinxBuilder
         $COL_GRAY = $ESC_SEQ . '37(;01)?m/';
         $COL_RESET = $ESC_SEQ . '39;49;00m/';
 
-        $mapping = array(
+        $mapping = [
             $COL_BLACK => '<span style="color:#000000">',
             $COL_RED => '<span style="color:#dc143c">',
             $COL_GREEN => '<span style="color:#228B22">',
@@ -792,7 +792,7 @@ class SphinxBuilder
             $COL_CYAN => '<span style="color:#00ffff">',
             $COL_GRAY => '<span style="color:#a9a9a9">',
             $COL_RESET => '</span>',
-        );
+        ];
         $output = preg_replace($ESC_SEQ . '01m/', '<span>', $output);
         foreach ($mapping as $pattern => $html) {
             $output = preg_replace($pattern, $html, $output);
@@ -809,7 +809,7 @@ class SphinxBuilder
      */
     public static function getSupportedLocales()
     {
-        return array(
+        return [
             'bn' => 'Bengali',
             'ca' => 'Catalan',
             'cs' => 'Czech',
@@ -845,7 +845,7 @@ class SphinxBuilder
             'uk_UA' => 'Ukrainian',
             'zh_CN' => 'Simplified Chinese',
             'zh_TW' => 'Traditional Chinese',
-        );
+        ];
     }
 
     /**

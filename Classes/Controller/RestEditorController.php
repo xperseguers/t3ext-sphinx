@@ -87,7 +87,7 @@ class RestEditorController extends AbstractActionController
      */
     public function openAction($reference, $filename)
     {
-        $response = array();
+        $response = [];
         $response['statusTitle'] = $this->translate('editor.message.open.title');
 
         try {
@@ -115,7 +115,7 @@ class RestEditorController extends AbstractActionController
      */
     public function saveAction($reference, $filename, $contents, $compile = false)
     {
-        $response = array();
+        $response = [];
         $response['statusTitle'] = $this->translate('editor.message.save.title');
 
         try {
@@ -153,12 +153,12 @@ class RestEditorController extends AbstractActionController
                         $this->signalSlotDispatcher->dispatch(
                             \Causal\Sphinx\Controller\DocumentationController::class,
                             'renderUserDocumentation',
-                            array(
+                            [
                                 'identifier' => $parts['identifier'],
                                 'layout' => $layout,
                                 'force' => $force,
                                 'documentationUrl' => &$outputFilename,
-                            )
+                            ]
                         );
                         break;
                 }
@@ -207,7 +207,7 @@ class RestEditorController extends AbstractActionController
             }
         }
 
-        $response = array();
+        $response = [];
         $response['status'] = $success ? 'success' : 'error';
 
         $this->returnAjax($response);
@@ -225,7 +225,7 @@ class RestEditorController extends AbstractActionController
      */
     public function removeAction($reference, $path)
     {
-        $response = array();
+        $response = [];
         $success = false;
 
         $path = str_replace('/', DIRECTORY_SEPARATOR, rtrim($path, '/'));
@@ -244,7 +244,7 @@ class RestEditorController extends AbstractActionController
                     $response['statusText'] = $this->translate('editor.action.error.unknownError');
                 }
             } else {
-                $files = GeneralUtility::getAllFilesAndFoldersInPath(array(), $target . DIRECTORY_SEPARATOR);
+                $files = GeneralUtility::getAllFilesAndFoldersInPath([], $target . DIRECTORY_SEPARATOR);
                 if (count($files) === 0) {
                     if ($parts['usingGit']) {
                         $target = substr($target, strlen($parts['basePath']) + 1);
@@ -275,15 +275,15 @@ class RestEditorController extends AbstractActionController
      */
     public function renameDialogAction($reference, $filename)
     {
-        $response = array();
+        $response = [];
 
         $fileParts = explode('/', rtrim($filename, '/'));
 
-        $this->view->assignMultiple(array(
+        $this->view->assignMultiple([
             'reference' => $reference,
             'filename' => $filename,
             'newName' => end($fileParts),
-        ));
+        ]);
 
         $response['status'] = 'success';
         $response['statusText'] = $this->view->render();
@@ -301,7 +301,7 @@ class RestEditorController extends AbstractActionController
      */
     public function renameAction($reference, $filename, $newName)
     {
-        $response = array();
+        $response = [];
         $success = false;
 
         $parts = $this->parseReferenceDocument($reference, '');
@@ -358,13 +358,13 @@ class RestEditorController extends AbstractActionController
      */
     public function createDialogAction($reference, $type, $path)
     {
-        $response = array();
+        $response = [];
 
-        $this->view->assignMultiple(array(
+        $this->view->assignMultiple([
             'reference' => $reference,
             'type' => $type,
             'path' => $path,
-        ));
+        ]);
 
         $response['status'] = 'success';
         $response['statusText'] = $this->view->render();
@@ -409,7 +409,7 @@ class RestEditorController extends AbstractActionController
      */
     protected function createFileOrFolder($reference, $path, $name, $isFile)
     {
-        $response = array();
+        $response = [];
         $success = false;
 
         $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
@@ -455,15 +455,15 @@ class RestEditorController extends AbstractActionController
      */
     public function uploadDialogAction($reference, $path)
     {
-        $response = array();
+        $response = [];
 
         $fileExtensions = $GLOBALS['TYPO3_CONF_VARS']['BE']['fileExtensions'];
-        $this->view->assignMultiple(array(
+        $this->view->assignMultiple([
             'reference' => $reference,
             'path' => $path,
             'allowedExtensions' => $fileExtensions['webspace']['allow'] ?: '*',
             'deniedExtensions' => $fileExtensions['webspace']['deny'],
-        ));
+        ]);
 
         $response['status'] = 'success';
         $response['statusText'] = $this->view->render();
@@ -480,7 +480,7 @@ class RestEditorController extends AbstractActionController
      */
     public function uploadAction($reference, $path)
     {
-        $response = array();
+        $response = [];
         $success = false;
 
         $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
@@ -529,7 +529,7 @@ class RestEditorController extends AbstractActionController
                     $response['statusText'] = $this->translate('editor.action.error.invalidExtension');
                 }
             } else {
-                $data = array();
+                $data = [];
 
                 // Register every upload field from the form:
                 $this->registerUploadField($data, $namespace, 'files', $targetDirectory);
@@ -537,8 +537,8 @@ class RestEditorController extends AbstractActionController
                 // Initializing:
                 /** @var \TYPO3\CMS\Core\Utility\File\ExtendedFileUtility $fileProcessor */
                 $fileProcessor = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Utility\File\ExtendedFileUtility::class);
-                $fileProcessor->init(array(), $GLOBALS['TYPO3_CONF_VARS']['BE']['fileExtensions']);
-                $fileProcessor->setActionPermissions(array('addFile' => true));
+                $fileProcessor->init([], $GLOBALS['TYPO3_CONF_VARS']['BE']['fileExtensions']);
+                $fileProcessor->setActionPermissions(['addFile' => true]);
                 $fileProcessor->setExistingFilesConflictMode($overwriteExistingFiles ? 'replace' : 'cancel');
 
                 // Actual upload
@@ -552,7 +552,7 @@ class RestEditorController extends AbstractActionController
                 }
             }
         } else {
-            $response['statusText'] = $this->translate('editor.action.error.invalidUploadDirectory', array($parts['basePath']));
+            $response['statusText'] = $this->translate('editor.action.error.invalidUploadDirectory', [$parts['basePath']]);
         }
 
         $response['status'] = $success ? 'success' : 'error';
@@ -610,7 +610,7 @@ class RestEditorController extends AbstractActionController
     protected function registerUploadField(array &$data, $namespace, $fieldName, $targetDirectory = '1:/_temp_/')
     {
         if (!isset($data['upload'])) {
-            $data['upload'] = array();
+            $data['upload'] = [];
         }
         $counter = count($data['upload']) + 1;
 
@@ -618,10 +618,10 @@ class RestEditorController extends AbstractActionController
         foreach ($keys as $key) {
             $_FILES['upload_' . $counter][$key] = $_FILES[$namespace][$key][$fieldName];
         }
-        $data['upload'][$counter] = array(
+        $data['upload'][$counter] = [
             'data' => $counter,
             'target' => $targetDirectory,
-        );
+        ];
     }
 
     /**
@@ -652,10 +652,10 @@ class RestEditorController extends AbstractActionController
      */
     public function projectTreeAction($path, $filename)
     {
-        $this->view->assignMultiple(array(
+        $this->view->assignMultiple([
             'projectPath' => $path,
             'filename' => $filename,
-        ));
+        ]);
         $out = $this->view->render();
         return $out;
     }
@@ -702,10 +702,10 @@ class RestEditorController extends AbstractActionController
                 $this->signalSlotDispatcher->dispatch(
                     \Causal\Sphinx\Controller\InteractiveViewerController::class,
                     'retrieveBasePath',
-                    array(
+                    [
                         'identifier' => $identifier,
                         'path' => &$path,
-                    )
+                    ]
                 );
                 $objectsInvFilename = $path . 'objects.inv';
             // NO BREAK here, fallback to default section
@@ -723,7 +723,7 @@ class RestEditorController extends AbstractActionController
             $remoteUrl,
             $objectsInvFilename
         );
-        $out = array();
+        $out = [];
 
         $lastMainChapter = '';
         foreach ($references as $chapter => $refs) {
@@ -756,7 +756,7 @@ class RestEditorController extends AbstractActionController
             $out[] = '<ul>';
             foreach ($refs as $ref) {
                 $restReference = ':ref:`' . ($usePrefix ? $prefix . ':' : '') . $ref['name'] . '` ';
-                $arg1 = '\'' . str_replace(array('\'', '"'), array('\\\'', '\\"'), $restReference) . '\'';
+                $arg1 = '\'' . str_replace(['\'', '"'], ['\\\'', '\\"'], $restReference) . '\'';
                 $arg2 = '\'' . ($usePrefix ? $prefix : '') . '\'';
                 $arg3 = '\'' . $remoteUrl . '\'';
                 $insertJS = 'EditorInsert(' . $arg1 . ',' . $arg2 . ',' . $arg3 . ');';
@@ -774,7 +774,7 @@ class RestEditorController extends AbstractActionController
             return $html;
         }
 
-        $this->returnAjax(array('html' => $html));
+        $this->returnAjax(['html' => $html]);
     }
 
     /**
@@ -809,7 +809,7 @@ class RestEditorController extends AbstractActionController
             $remoteUrl ?: 'https://docs.typo3.org/typo3cms/extensions/' . $prefix
         );
 
-        $response = array();
+        $response = [];
         $response['statusTitle'] = $this->translate('editor.message.intersphinx.title');
 
         if ($ret === null) {
@@ -904,12 +904,12 @@ class RestEditorController extends AbstractActionController
                 $this->signalSlotDispatcher->dispatch(
                     __CLASS__,
                     'retrieveRestFilename',
-                    array(
+                    [
                         'identifier' => $identifier,
                         'document' => $document,
                         'basePath' => &$basePath,
                         'filename' => &$slotFilename,
-                    )
+                    ]
                 );
                 if ($slotFilename === null) {
                     throw new \RuntimeException('No slot found to retrieve filename with identifier "' . $identifier . '"', 1371418203);
@@ -927,7 +927,7 @@ class RestEditorController extends AbstractActionController
         $basePath = PathUtility::getCanonicalPath($basePath);
         $usingGit = GitUtility::isAvailable() && GitUtility::status($basePath);
 
-        return array(
+        return [
             'basePath' => $basePath,
             'filename' => PathUtility::getCanonicalPath($filename),
             'type' => $type,
@@ -935,7 +935,7 @@ class RestEditorController extends AbstractActionController
             'extensionKey' => $extensionKey,
             'locale' => $locale,
             'usingGit' => $usingGit,
-        );
+        ];
     }
 
     /**
@@ -1004,7 +1004,7 @@ class RestEditorController extends AbstractActionController
      */
     protected function getButtons()
     {
-        $buttons = array();
+        $buttons = [];
 
         $buttons[] = $this->createToolbarButton(
             '#',

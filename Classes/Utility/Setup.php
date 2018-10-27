@@ -35,7 +35,7 @@ class Setup
     protected static $extKey = 'sphinx';
 
     /** @var array */
-    protected static $log = array();
+    protected static $log = [];
 
     /**
      * Returns the version of python.
@@ -67,7 +67,7 @@ class Setup
      */
     public static function createLibraryDirectories()
     {
-        $errors = array();
+        $errors = [];
 
         if ($GLOBALS['TYPO3_CONF_VARS']['BE']['disable_exec_function'] == 1) {
             $errors[] = 'You have disabled exec() with $TYPO3_CONF_VARS[\'BE\'][\'disable_exec_function\'] = \'1\'. ' .
@@ -84,11 +84,11 @@ class Setup
                 '$TYPO3_CONF_VARS[\'SYS\'][\'binPath\'] and/or $TYPO3_CONF_VARS[\'SYS\'][\'binSetup\'].';
         }
 
-        $directories = array(
+        $directories = [
             'typo3temp/tx_sphinx/sphinx-doc/',
             'typo3temp/tx_sphinx/sphinx-doc/bin/',
             'uploads/tx_sphinx/',
-        );
+        ];
         foreach ($directories as $directory) {
             $absoluteDirectory = GeneralUtility::getFileAbsFileName($directory);
             if (!is_dir($absoluteDirectory)) {
@@ -143,7 +143,7 @@ class Setup
             $targetPath = $sphinxSourcesPath . $version;
 
             // Unzip the Sphinx archive
-            $out = array();
+            $out = [];
             if (static::unarchive($zipFilename, $targetPath, 'sphinx-')) {
                 $output[] = '[INFO] Sphinx ' . $version . ' has been unpacked.';
 
@@ -210,7 +210,7 @@ class Setup
             $cmd = 'cd ' . escapeshellarg(PathUtility::dirname($setupFile)) . ' && ' .
                 $python . ' setup.py clean 2>&1 && ' .
                 $python . ' setup.py build 2>&1';
-            $out = array();
+            $out = [];
             static::exec($cmd, $out, $ret);
             if ($ret === 0) {
                 $pythonHome = $sphinxPath . $version;
@@ -229,7 +229,7 @@ class Setup
                 $cmd = 'cd ' . escapeshellarg(PathUtility::dirname($setupFile)) . ' && ' .
                     MiscUtility::getExportCommand('PYTHONPATH', $safePythonLib) . ' && ' .
                     $python . ' setup.py install --home=' . escapeshellarg($pythonHome) . ' 2>&1';
-                $out = array();
+                $out = [];
                 static::exec($cmd, $out, $ret);
                 if ($ret === 0) {
                     $output[] = '[OK] Sphinx ' . $version . ' has been successfully installed.';
@@ -247,10 +247,10 @@ class Setup
         }
 
         if ($success) {
-            $shortcutScripts = array(
+            $shortcutScripts = [
                 'sphinx-build',
                 'sphinx-quickstart',
-            );
+            ];
             $pythonPath = $sphinxPath . $version . '/lib/python';
 
             // Compatibility with Windows platform
@@ -318,10 +318,10 @@ EOT;
             }
         }
 
-        $shortcutScripts = array(
+        $shortcutScripts = [
             'sphinx-build-' . $version,
             'sphinx-quickstart-' . $version,
-        );
+        ];
         foreach ($shortcutScripts as $shortcutScript) {
             $shortcutFilename = $sphinxPath . 'bin' . DIRECTORY_SEPARATOR . $shortcutScript;
 
@@ -538,7 +538,7 @@ EOT;
                     $targetPath = $sphinxSourcesPath . 'sphinx-contrib';
 
                     // Unpack 3rd-party libraries archive
-                    $out = array();
+                    $out = [];
                     if (static::unarchive($archiveFilename, $targetPath, 'xperseguers-sphinx-contrib-', $out)) {
                         $output[] = '[INFO] 3rd-party libraries for Sphinx have been unpacked.';
                     } else {
@@ -631,9 +631,9 @@ EOT;
     {
         $sphinxSourcesPath = static::getSphinxSourcesPath();
         $pluginsPath = $sphinxSourcesPath . 'sphinx-contrib/';
-        $plugins = array();
+        $plugins = [];
 
-        $descriptions = array(
+        $descriptions = [
             'aafig' => 'render embeded ASCII art as nice images using aafigure.',
             'actdiag' => 'embed activity diagrams by using actdiag',
             'adadomain' => 'an extension for Ada support (Sphinx 1.0 needed)',
@@ -691,18 +691,18 @@ EOT;
             'whooshindex' => 'whoosh indexer extension',
             'youtube' => 'embed videos from YouTube',
             'zopeext' => 'provide an autointerface directive for using Zope interfaces.',
-        );
+        ];
 
         // We have no official list but Xavier Perseguers (@xperseguers) takes care
         // of maintaining this list
-        $availableOnDocsTypo3Org = array(
+        $availableOnDocsTypo3Org = [
             'googlechart',
             'googlemaps',
             'httpdomain',
             'numfig',
             'slide',
             'youtube',
-        );
+        ];
 
         $directories = GeneralUtility::get_dirs($pluginsPath);
         if (is_array($directories)) {
@@ -710,12 +710,12 @@ EOT;
                 if ($directory{0} === '_' || !is_file($pluginsPath . $directory . '/README.rst')) {
                     continue;
                 }
-                $plugins[] = array(
+                $plugins[] = [
                     'name' => $directory,
                     'description' => isset($descriptions[$directory]) ? $descriptions[$directory] : '',
                     'readme' => substr($pluginsPath . $directory . '/README.rst', strlen(PATH_site) - 1),
                     'docst3o' => in_array($directory, $availableOnDocsTypo3Org),
-                );
+                ];
             }
         }
 
@@ -757,7 +757,7 @@ EOT;
             $targetPath = $sphinxSourcesPath . 'PyYAML';
 
             // Unpack PyYAML archive
-            $out = array();
+            $out = [];
             if (static::unarchive($archiveFilename, $targetPath, 'PyYAML-3.10', $out)) {
                 $output[] = '[INFO] PyYAML has been unpacked.';
             } else {
@@ -863,7 +863,7 @@ EOT;
             $targetPath = $sphinxSourcesPath . 'Imaging';
 
             // Unpack Python Imaging Library archive
-            $out = array();
+            $out = [];
             if (static::unarchive($archiveFilename, $targetPath, 'Imaging-1.1.7', $out)) {
                 $output[] = '[INFO] Python Imaging Library has been unpacked.';
             } else {
@@ -991,7 +991,7 @@ EOT;
             $targetPath = $sphinxSourcesPath . 'Pygments/' . $versionUrl['version'];
 
             // Unpack Pygments archive
-            $out = array();
+            $out = [];
             if (static::unarchive($archiveFilename, $targetPath, 'birkenfeld-pygments-main-', $out)) {
                 $output[] = '[INFO] Pygments ' . $versionUrl['version'] . ' has been unpacked.';
             } else {
@@ -1089,7 +1089,7 @@ EOT;
                 $python = escapeshellarg(CommandUtility::getCommand('python'));
                 $cmd = 'cd ' . escapeshellarg($lexersPath) . ' && ' .
                     $python . ' _mapping.py 2>&1';
-                $out = array();
+                $out = [];
                 static::exec($cmd, $out, $ret);
                 if ($ret === 0) {
                     $output[] = '[OK] TypoScript library successfully registered with Pygments ' . $pygmentsVersion . '.';
@@ -1160,7 +1160,7 @@ EOT;
             $targetPath = $sphinxSourcesPath . 'rst2pdf';
 
             // Unpack rst2pdf archive
-            $out = array();
+            $out = [];
             if (static::unarchive($archiveFilename, $targetPath, 'rst2pdf-0.93', $out)) {
                 $output[] = '[INFO] rst2pdf has been unpacked.';
             } else {
@@ -1292,7 +1292,7 @@ EOT;
 
         $tagsHtml = substr($html, strpos($html, ' id="tag-downloads"'));
 
-        $versions = array();
+        $versions = [];
         preg_replace_callback(
             '#<tr class="iterable-item">.*?<td class="name">([^<]*)</td>.*?<a class="lfs-warn-link" href="([^"]+)">gz</a>#s',
             function ($matches) use ($baseUrl, &$versions) {
@@ -1302,11 +1302,11 @@ EOT;
 
                     // Remove RC's
                     if (strpos($name, 'rc') === false) {
-                        $versions[$name] = array(
+                        $versions[$name] = [
                             'key' => $key,
                             'name' => $name,
                             'url' => $baseUrl . $matches[2],
-                        );
+                        ];
                     }
                 }
             },
@@ -1357,7 +1357,7 @@ EOT;
     public static function getSphinxLocalVersions()
     {
         $sphinxPath = static::getSphinxPath();
-        $versions = array();
+        $versions = [];
         if (is_dir($sphinxPath)) {
             $versions = GeneralUtility::get_dirs($sphinxPath);
         }
@@ -1371,7 +1371,7 @@ EOT;
      */
     public static function getPygmentsLocalVersions()
     {
-        $versions = array();
+        $versions = [];
         $sphinxSourcesPath = static::getSphinxSourcesPath();
         $pygmentsPath = $sphinxSourcesPath . 'Pygments/';
 
@@ -1446,7 +1446,7 @@ EOT;
         }
 
         return $highestVersion !== null
-            ? array('version' => $highestVersion, 'url' => $availableVersions[$highestVersion]['url'])
+            ? ['version' => $highestVersion, 'url' => $availableVersions[$highestVersion]['url']]
             : null;
     }
 
@@ -1502,7 +1502,7 @@ EOT;
                     $files = glob($tarFilePattern);
                     if ($files === false) {
                         // An error occured
-                        $files = array();
+                        $files = [];
                     }
                     foreach ($files as $file) {
                         @unlink($file);
@@ -1568,7 +1568,7 @@ EOT;
         $cmd = 'cd ' . escapeshellarg(PathUtility::dirname($setupFile)) . ' && ' .
             $python . ' setup.py clean 2>&1 && ' .
             $python . ' setup.py' . ($extraFlags ? ' ' . $extraFlags : '') . ' build 2>&1';
-        $out = array();
+        $out = [];
         static::exec($cmd, $out, $ret);
         if ($ret === 0) {
             $safePythonLib = strpos($pythonLib, ' ') !== false
@@ -1577,7 +1577,7 @@ EOT;
             $cmd = 'cd ' . escapeshellarg(PathUtility::dirname($setupFile)) . ' && ' .
                 MiscUtility::getExportCommand('PYTHONPATH', $safePythonLib) . ' && ' .
                 $python . ' setup.py' . ($extraFlags ? ' ' . $extraFlags : '') . ' install --home=' . escapeshellarg($pythonHome) . ' 2>&1';
-            $out = array();
+            $out = [];
             static::exec($cmd, $out, $ret);
             if ($ret === 0) {
                 $success = true;
@@ -1639,7 +1639,7 @@ EOT;
             $targetPath = $sphinxSourcesPath . $package;
 
             // Unzip the archive
-            $out = array();
+            $out = [];
             if (static::unarchive($zipFilename, $targetPath, $package . '-master')) {
                 $output[] = '[INFO] ' . $package . ' has been unpacked.';
             } else {
@@ -1661,7 +1661,7 @@ EOT;
      */
     public static function clearLog()
     {
-        static::$log = array();
+        static::$log = [];
     }
 
     /**

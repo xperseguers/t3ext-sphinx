@@ -46,7 +46,7 @@ abstract class AbstractActionController extends \TYPO3\CMS\Extbase\Mvc\Controlle
     {
         $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->request->getControllerExtensionKey()]);
         if (!is_array($configuration)) {
-            $configuration = array();
+            $configuration = [];
         }
         $this->settings = GeneralUtility::array_merge($configuration, $this->settings);
     }

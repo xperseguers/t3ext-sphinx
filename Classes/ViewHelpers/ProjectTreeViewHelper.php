@@ -48,9 +48,9 @@ class ProjectTreeViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractVie
             $reveal = md5($reveal);
         }
 
-        $excludePatterns = array(
+        $excludePatterns = [
             '#(^\\.|/\\.).+#',
-        );
+        ];
         $projectStructure = MiscUtility::getProjectStructure($projectPath);
         switch ($projectStructure) {
             case MiscUtility::PROJECT_STRUCTURE_SINGLE:
@@ -63,7 +63,7 @@ class ProjectTreeViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractVie
 
         $pluginId = 'tx-sphinx-projecttree';
 
-        $out = array();
+        $out = [];
         $out[] = <<<HTML
 <table id="$pluginId">
     <caption>

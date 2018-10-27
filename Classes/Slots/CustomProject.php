@@ -117,7 +117,7 @@ class CustomProject
                     $contentObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 
                     $projectName = str_replace(' ', '', $project->getName());
-                    $markers = array(
+                    $markers = [
                         'PROJECT' => $projectName,
                         'PROJECT_NAME' => $projectName,
                         'CURRENT_DATE' => date('r'),
@@ -127,7 +127,7 @@ class CustomProject
                         'PATH_STATIC' => '_static',
                         'SOURCE_FILE_SUFFIX' => '.rst',
                         'EXCLUDE_PATTERN' => '_make',
-                    );
+                    ];
 
                     $confPyTemplate = ExtensionManagementUtility::extPath(static::$extKey) . 'Resources/Private/Templates/Projects/TYPO3DocEmptyProject/_make/conf.py.tmpl';
 
@@ -156,7 +156,7 @@ class CustomProject
         }
 
         try {
-            $tags = array();
+            $tags = [];
             $useCache = true;
 
             switch ($layout) {
@@ -224,7 +224,7 @@ class CustomProject
                     $availablePdfs = glob($absoluteBasePath . $masterFilePattern);
                     if ($availablePdfs === false) {
                         // An error occured
-                        $availablePdfs = array();
+                        $availablePdfs = [];
                     }
                     if ($force || count($availablePdfs) == 0) {
                         if (is_file($warningsFilename)) {

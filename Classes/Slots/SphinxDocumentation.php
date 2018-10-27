@@ -57,7 +57,7 @@ class SphinxDocumentation
     public function postProcessDocuments($language, array &$documents)
     {
         $formats = $this->getSupportedFormats();
-        $unsetDocuments = array();
+        $unsetDocuments = [];
 
         if (count($formats) === 0) {
             return;
@@ -108,7 +108,7 @@ class SphinxDocumentation
                 $document->addTranslation($documentTranslation);
             }
 
-            $existingFormats = array();
+            $existingFormats = [];
             foreach ($documentTranslation->getFormats() as $documentFormat) {
                 /** @var $documentFormat \TYPO3\CMS\Documentation\Domain\Model\DocumentFormat */
                 if ($documentFormat->getFormat() === 'sxw') {
@@ -177,9 +177,9 @@ class SphinxDocumentation
     protected function getSupportedFormats()
     {
         if (!\Causal\Sphinx\Utility\SphinxBuilder::isReady()) {
-            return array();
+            return [];
         }
-        $formats = array('html', 'json');
+        $formats = ['html', 'json'];
 
         $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sphinx']);
         switch ($configuration['pdf_builder']) {
@@ -213,15 +213,15 @@ class SphinxDocumentation
         /** @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder */
         $uriBuilder = $this->objectManager->get(\TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder::class);
         $request = $this->objectManager->get(\TYPO3\CMS\Extbase\Mvc\Web\Request::class);
-        $uriBuilder->setRequest($request)->setArguments(array('M' => 'help_SphinxDocumentation'));
+        $uriBuilder->setRequest($request)->setArguments(['M' => 'help_SphinxDocumentation']);
 
         $link = $uriBuilder->uriFor(
             'index',
-            array(
+            [
                 'reference' => $referenceType . ':' . $reference,
                 'layout' => $format,
                 'force' => false,
-            ),
+            ],
             'Documentation',
             'sphinx',
             'help_sphinxdocumentation'

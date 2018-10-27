@@ -41,10 +41,10 @@ class SphinxResourceViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\Abstract
     public function render($path, $absolute = false)
     {
         return static::renderStatic(
-            array(
+            [
                 'path' => $path,
                 'absolute' => $absolute
-            ),
+            ],
             $this->buildRenderChildrenClosure(),
             $this->renderingContext
         );

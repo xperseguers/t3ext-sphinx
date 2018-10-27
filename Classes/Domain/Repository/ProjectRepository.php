@@ -38,7 +38,7 @@ class ProjectRepository implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function findAll()
     {
-        $projects = array();
+        $projects = [];
         $data = $this->loadProjects();
         foreach ($data as $p) {
             $project = $this->instantiateProjectFromArray($p);
@@ -77,13 +77,13 @@ class ProjectRepository implements \TYPO3\CMS\Core\SingletonInterface
     public function add(\Causal\Sphinx\Domain\Model\Project $project)
     {
         $projects = $this->loadProjects();
-        $projects[] = array(
+        $projects[] = [
             'name' => $project->getName(),
             'description' => $project->getDescription(),
             'group' => $project->getGroup(),
             'key' => $project->getDocumentationKey(),
             'directory' => $project->getDirectory(),
-        );
+        ];
 
         return $this->persistProjects($projects);
     }
@@ -102,14 +102,14 @@ class ProjectRepository implements \TYPO3\CMS\Core\SingletonInterface
 
         for ($i = 0; $i < $numberOfProjects; $i++) {
             if ($projects[$i]['key'] === $project->getUid()) {
-                $projects[$i] = array(
+                $projects[$i] = [
                     'name' => $project->getName(),
                     'language' => $project->getLanguage(),
                     'description' => $project->getDescription(),
                     'group' => $project->getGroup(),
                     'key' => $project->getDocumentationKey(),
                     'directory' => $project->getDirectory(),
-                );
+                ];
                 $found = true;
                 break;
             }
@@ -196,13 +196,13 @@ class ProjectRepository implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected function loadProjects()
     {
-        $projects = array();
+        $projects = [];
         $filename = GeneralUtility::getFileAbsFileName(static::PROJECTS_FILENAME);
         if (is_file($filename)) {
             $contents = file_get_contents($filename);
             $projects = json_decode($contents, true);
             if (!is_array($projects)) {
-                $projects = array();
+                $projects = [];
             }
         }
         return array_values($projects);
@@ -233,7 +233,7 @@ class ProjectRepository implements \TYPO3\CMS\Core\SingletonInterface
                 $content = str_replace('"}', "\"\n\t}", $content);
                 $content = str_replace('},', "},\n\t", $content);
                 $content = str_replace('","', "\",\n\t\t\"", $content);
-                $content = str_replace(array(':{', '":"'), array(': {', '": "'), $content);
+                $content = str_replace([':{', '":"'], [': {', '": "'], $content);
             }
         }
         return GeneralUtility::writeFile($filename, $content);

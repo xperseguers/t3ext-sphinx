@@ -165,7 +165,7 @@ class OpenOfficeConverter
                 $extensionPath = PATH_site . 'typo3conf/ext/' . $extensionKey . '/';
             }
             if (is_file($extensionPath . 'ext_emconf.php')) {
-                $EM_CONF = array();
+                $EM_CONF = [];
                 $_EXTKEY = $extensionKey;
                 include($extensionPath . 'ext_emconf.php');
                 if (!empty($EM_CONF[$_EXTKEY]['description'])) {
@@ -202,17 +202,17 @@ class OpenOfficeConverter
         // Tables are defined as <table:table ...> nodes, which is not handy
         // to loop sequentially over document blocks since everything else is
         // defined with a "text:" namespace
-        $data = str_replace(array('<table:', '</table:'), array('<text:', '</text:'), $data);
+        $data = str_replace(['<table:', '</table:'], ['<text:', '</text:'], $data);
 
         $xml = simplexml_load_string($data);
         $document = $xml->children('office', true);
 
         // Get styles
-        $this->styles = array(
-            'Preformatted Text' => array(
+        $this->styles = [
+            'Preformatted Text' => [
                 'code' => true,
-            ),
-        );
+            ],
+        ];
         foreach ($document->{'automatic-styles'}->children('style', true) as $style) {
             $children = $style->children('style', true);
             if (!isset($children->properties)) continue;
@@ -222,24 +222,24 @@ class OpenOfficeConverter
 
             if ((string)$fontProperties->{'font-weight'} === 'bold') {
                 $marker = $this->getRandomMarker('bold');
-                $this->styles[$styleName] = array(
+                $this->styles[$styleName] = [
                     str_replace('XX', 'START', $marker), str_replace('XX', 'END', $marker),
                     '**', '** '
-                );
+                ];
             } elseif ((string)$fontProperties->{'font-style'} === 'italic') {
                 $randomMarker = $this->getRandomMarker('italic');
-                $this->styles[$styleName] = array(
+                $this->styles[$styleName] = [
                     str_replace('XX', 'START', $marker), str_replace('XX', 'END', $marker),
                     '*', '* '
-                );
+                ];
             } elseif (isset($fontProperties->{'margin-left'})) {
-                $this->styles[$styleName] = array(
+                $this->styles[$styleName] = [
                     'indent' => true,
-                );
+                ];
             } elseif ((string)$style->attributes('style', true)->{'parent-style-name'} === 'Preformatted Text') {
-                $this->styles[$styleName] = array(
+                $this->styles[$styleName] = [
                     'code' => true,
-                );
+                ];
             }
         }
 
@@ -247,7 +247,7 @@ class OpenOfficeConverter
         // defined as part of the 1st level style but we take for acceptable
         // for this automatic conversion that the same type of bullet/number
         // is used for children as well
-        $this->listStyles = array();
+        $this->listStyles = [];
         foreach ($document->{'automatic-styles'}->children('text', true) as $listStyle) {
             $styleName = (string)$listStyle->attributes('style', true)->name;
             $definition = $listStyle->children('text', true);
@@ -255,19 +255,19 @@ class OpenOfficeConverter
             $this->listStyles[$styleName] = $isNumbered ? '#. ' : '- ';
         }
 
-        $this->restFiles = array(
-            0 => array(
-                'start' => array(
+        $this->restFiles = [
+            0 => [
+                'start' => [
                     'parent' => '',
                     'file' => 'Index',
-                ),
-            ),
-        );
-        $this->anchors = array();
-        $this->anchorStack = array();
+                ],
+            ],
+        ];
+        $this->anchors = [];
+        $this->anchorStack = [];
 
-        $buffer = array();
-        $bottom = array();
+        $buffer = [];
+        $bottom = [];
         $lastChapterLevel = null;
         $skipContent = true;
 
@@ -275,7 +275,7 @@ class OpenOfficeConverter
         foreach ($document->body->children('text', true) as $block) {
             // Accumulator for reStructuredText instructions to be added
             // after the rendered content itself
-            $instructions = array();
+            $instructions = [];
 
             switch ($block->getName()) {
                 case 'h':
@@ -331,14 +331,14 @@ class OpenOfficeConverter
      */
     protected function processHeading(\SimpleXMLElement $block, array &$buffer, array &$bottom, &$lastChapterLevel, &$skipContent)
     {
-        $headlineChars = array(
+        $headlineChars = [
             1 => '=',   // Will get overlined as well
             2 => '=',
             3 => '-',
             4 => '^',
             5 => '"',
             6 => '~',   // No, seriously?
-        );
+        ];
 
         // Real content (no more toc, ...)
         $skipContent = false;
@@ -388,12 +388,12 @@ class OpenOfficeConverter
             foreach ($this->anchorStack as $segment) {
                 $chapterDirectory .= GeneralUtility::underscoredToUpperCamelCase(str_replace('-', '_', $segment)) . '/';
             }
-            $this->restFiles[$level - 1][$anchorKey] = array(
+            $this->restFiles[$level - 1][$anchorKey] = [
                 'parent' => $level > 2
                     ? $this->anchorStack[$level - 3]
                     : 'start',
                 'file' => $chapterDirectory . 'Index',
-            );
+            ];
 
             // As a matter of style, prefix headings with an additional blank line
             $buffer[] = '';
@@ -481,7 +481,7 @@ class OpenOfficeConverter
             foreach ($listItem->children('text', true) as $item) {
                 switch ($item->getName()) {
                     case 'p':
-                        $output = array();
+                        $output = [];
                         if ($this->processParagraph($item, $output, $instructions, $bottom, static::PARAGRAPH_WIDTH - 2 * $level)) {
                             if ($unindent) {
                                 $buffer[] = '';
@@ -492,7 +492,7 @@ class OpenOfficeConverter
                         }
                         break;
                     case 'ordered-list':
-                        $output = array();
+                        $output = [];
                         // Copy the style of parent list to sub lists
                         $item->addAttribute('text:style-name', $styleName, 'http://openoffice.org/2000/text');
                         if ($this->processOrderedList($item, $output, $instructions, $bottom, $level + 1)) {
@@ -520,7 +520,7 @@ class OpenOfficeConverter
     protected function processTable(\SimpleXMLElement $block, array &$buffer, array &$instructions, array &$bottom)
     {
         $hasHeaders = false;
-        $rows = array();
+        $rows = [];
 
         if (isset($block->{'table-header-rows'})) {
             $headerRows = $block->{'table-header-rows'}->children('text', true);
@@ -540,7 +540,7 @@ class OpenOfficeConverter
 
         // Loop through all cells, wrapping text (except for first column) and
         // measuring the maximum width needed to hold every cells' contents
-        $columnWidths = array();
+        $columnWidths = [];
         $numberRows = count($rows);
         for ($i = 0; $i < $numberRows; $i++) {
             $c = 0;
@@ -598,13 +598,13 @@ class OpenOfficeConverter
      */
     protected function processTableRow(\SimpleXMLElement $row, array &$instructions, array &$bottom)
     {
-        $tr = array();
+        $tr = [];
 
         foreach ($row->children('text', true) as $cell) {
-            $td = array();
+            $td = [];
             foreach ($cell->children('text', true) as $p) {
                 if ($p->getName() === 'p') {
-                    $output = array();
+                    $output = [];
                     if ($this->processParagraph($p, $output, $instructions, $bottom, 0)) {
                         $td[] = implode(LF, $output);
                     }
@@ -633,7 +633,7 @@ class OpenOfficeConverter
             $height = max($height, count($cells[$i]));
         }
 
-        $lines = array();
+        $lines = [];
         for ($i = 0; $i < $height; $i++) {
             $line = '';
             for ($j = 0; $j < $numberCells; $j++) {
@@ -677,8 +677,8 @@ class OpenOfficeConverter
         }
 
         // Remove useless instructions
-        $text = str_replace(array('<text:soft-page-break/>', '<text:tab-stop/>', '<text:s/>'), '', $text);
-        $text = str_replace(array('<text:line-break/>'), ' ', $text);
+        $text = str_replace(['<text:soft-page-break/>', '<text:tab-stop/>', '<text:s/>'], '', $text);
+        $text = str_replace(['<text:line-break/>'], ' ', $text);
 
         // Decode HTML entities
         $text = str_replace('&apos;', '\'', htmlspecialchars_decode($text));
@@ -711,7 +711,7 @@ class OpenOfficeConverter
 
         if (!$isCodeBlock) {
             // Escape special characters
-            $text = str_replace(array('*', '`'), array('\\*', '\\`'), $text);
+            $text = str_replace(['*', '`'], ['\\*', '\\`'], $text);
         }
 
         // Remove bookmark definitions
@@ -844,7 +844,7 @@ class OpenOfficeConverter
      */
     protected function getRandomMarker($type)
     {
-        static $markers = array();
+        static $markers = [];
 
         if (!isset($markers[$type])) {
             $wrap = '___';
@@ -945,7 +945,7 @@ YAML;
      */
     protected function extractMetadata($path)
     {
-        $metadata = array(
+        $metadata = [
             'title' => '',
             'author' => '',
             'email' => '',
@@ -953,10 +953,10 @@ YAML;
             'language' => '',
             'extensionKey' => '',
             'copyright' => '',
-            'keywords' => array(),
+            'keywords' => [],
             'version' => '0.0.0',
             'oooVersion' => '0.0',
-        );
+        ];
 
         if (!is_file($path . 'meta.xml')) {
             return $metadata;
@@ -1011,7 +1011,7 @@ YAML;
      */
     protected function extractImages($path, $imagesPath)
     {
-        $images = array();
+        $images = [];
         $sourcePath = $path . 'Pictures/';
         $files = GeneralUtility::getFilesInDir($sourcePath);
 
@@ -1102,8 +1102,8 @@ REST;
         GeneralUtility::writeFile($chapterFileName, $contents);
 
         // Resets the buffers
-        $buffer = array();
-        $bottom = array();
+        $buffer = [];
+        $bottom = [];
     }
 
     /**
@@ -1113,14 +1113,14 @@ REST;
      */
     protected function createTablesOfContents()
     {
-        $data = array();
+        $data = [];
         $levels = count($this->restFiles);
         for ($i = 0; $i < $levels; $i++) {
             foreach ($this->restFiles[$i] as $anchor => $info) {
-                $data[$i . '-' . $anchor] = array(
+                $data[$i . '-' . $anchor] = [
                     'file' => $info['file'],
-                    'chapters' => array(),
-                );
+                    'chapters' => [],
+                ];
                 if (!empty($info['parent'])) {
                     $parentAnchor = $info['parent'];
                     $parentLevel = $i - 1;

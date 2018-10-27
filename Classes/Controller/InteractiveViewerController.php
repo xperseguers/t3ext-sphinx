@@ -97,10 +97,10 @@ class InteractiveViewerController extends AbstractActionController
                     $this->signalSlotDispatcher->dispatch(
                         __CLASS__,
                         'retrieveBasePath',
-                        array(
+                        [
                             'identifier' => $identifier,
                             'path' => &$path,
-                        )
+                        ]
                     );
                 }
                 break;
@@ -126,8 +126,8 @@ class InteractiveViewerController extends AbstractActionController
 
         /** @var \Causal\Sphinx\Domain\Model\Documentation $documentation */
         $documentation = GeneralUtility::makeInstance(\Causal\Sphinx\Domain\Model\Documentation::class, $this->sphinxReader);
-        $documentation->setCallbackLinks(array($this, 'getLink'));
-        $documentation->setCallbackImages(array($this, 'processImage'));
+        $documentation->setCallbackLinks([$this, 'getLink']);
+        $documentation->setCallbackImages([$this, 'processImage']);
 
         $this->view->assign('documentation', $documentation);
         $this->view->assign('reference', $reference);
@@ -186,7 +186,7 @@ class InteractiveViewerController extends AbstractActionController
             $restdocVersion = ExtensionManagementUtility::getExtensionVersion('restdoc');
         } catch (\TYPO3\CMS\Core\Package\Exception $exception) {
             // Possible problem as described on https://forge.typo3.org/issues/70175
-            $EM_CONF = array();
+            $EM_CONF = [];
             $_EXTKEY = 'restdoc';
             include(ExtensionManagementUtility::extPath($_EXTKEY) . 'ext_emconf.php');
             $restdocVersion = $EM_CONF[$_EXTKEY]['version'];
@@ -230,10 +230,10 @@ class InteractiveViewerController extends AbstractActionController
         }
         $link = $this->uriBuilder->uriFor(
             'render',
-            array(
+            [
                 'reference' => $this->reference,
                 'document' => $document
-            )
+            ]
         );
         switch (true) {
             case $anchor !== '':
@@ -253,10 +253,10 @@ class InteractiveViewerController extends AbstractActionController
                             $this->signalSlotDispatcher->dispatch(
                                 __CLASS__,
                                 'retrieveBasePath',
-                                array(
+                                [
                                     'identifier' => $identifier,
                                     'path' => &$basePath,
-                                )
+                                ]
                             );
                             $basePath = substr($basePath, strlen(PATH_site));
                         }
@@ -293,7 +293,7 @@ class InteractiveViewerController extends AbstractActionController
         $tag .= ' alt="' . (!empty($data['alt']) ? htmlspecialchars($data['alt']) : '') . '"';
 
         // Styling
-        $classes = array();
+        $classes = [];
         if (!empty($data['class'])) {
             $classes = explode(' ', $data['class']);
         }
@@ -321,7 +321,7 @@ class InteractiveViewerController extends AbstractActionController
      */
     protected function getButtons($reference, $document, $warningsFilename)
     {
-        $buttons = array();
+        $buttons = [];
 
         if ($document !== 'genindex/') {
             $buttons[] = $this->createToolbarButton(
@@ -377,10 +377,10 @@ class InteractiveViewerController extends AbstractActionController
         }
         $url = $this->uriBuilder->uriFor(
             'edit',
-            array(
+            [
                 'reference' => $reference,
                 'document' => $document,
-            ),
+            ],
             'RestEditor'
         );
         if ($createAbsoluteUri) {
@@ -399,7 +399,7 @@ class InteractiveViewerController extends AbstractActionController
      */
     protected function getTranslations($reference, $document)
     {
-        $translations = array();
+        $translations = [];
 
         list($type, $identifier) = explode(':', $reference, 2);
         if ($type === 'EXT') {
@@ -424,36 +424,36 @@ class InteractiveViewerController extends AbstractActionController
                         $localizationLocale = $localizationDirectory['locale'];
 
                         if (is_file($absoluteFilename) && !isset($translations[$localizationLocale])) {
-                            $translations[$localizationLocale] = array(
+                            $translations[$localizationLocale] = [
                                 'name' => $localizationLocale,
                                 'link' => $this->uriBuilder->uriFor(
                                     'index',
-                                    array(
+                                    [
                                         'reference' => 'EXT:' . $extensionKey . '.' . $localizationLocale,
                                         'document' => $document,
                                         'layout' => 'json',
-                                    ),
+                                    ],
                                     'Documentation'
                                 ),
                                 'active' => ($locale === $localizationLocale),
-                            );
+                            ];
                         }
                     }
                     if (count($translations) > 0) {
                         // Prepend English version
-                        array_unshift($translations, array(
+                        array_unshift($translations, [
                             'name' => 'en_US',
                             'link' => $this->uriBuilder->uriFor(
                                 'index',
-                                array(
+                                [
                                     'reference' => 'EXT:' . $extensionKey,
                                     'document' => $document,
                                     'layout' => 'json',
-                                ),
+                                ],
                                 'Documentation'
                             ),
                             'active' => empty($locale),
-                        ));
+                        ]);
                     }
                 }
             }
@@ -482,7 +482,7 @@ class InteractiveViewerController extends AbstractActionController
         $cacheFiles = glob($cacheDirectory . 'warnings-' . md5($path) . '.*');
         if ($cacheFiles === false) {
             // An error occured
-            $cacheFiles = array();
+            $cacheFiles = [];
         }
         $validCacheFile = null;
         foreach ($cacheFiles as $cacheFile) {
@@ -541,11 +541,11 @@ class InteractiveViewerController extends AbstractActionController
                     $self->uriBuilder->setCreateAbsoluteUri(true);
                     $actionUrl = $self->uriBuilder->uriFor(
                         'edit',
-                        array(
+                        [
                             'reference' => $reference,
                             'document' => $document,
                             'startLine' => $line,
-                        ),
+                        ],
                         'RestEditor'
                     );
                     $self->uriBuilder->setCreateAbsoluteUri(false);

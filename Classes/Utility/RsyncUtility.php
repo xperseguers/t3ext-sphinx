@@ -33,7 +33,7 @@ class RsyncUtility
     /**
      * @var array
      */
-    protected $fileExtensions = array();
+    protected $fileExtensions = [];
 
     /**
      * Sets the file extensions.
@@ -75,13 +75,13 @@ class RsyncUtility
      */
     public function getFilesRecursively($path, $useCache = false)
     {
-        static $cachePaths = array();
+        static $cachePaths = [];
 
         if ($useCache && isset($cachePaths[$path])) {
             return $cachePaths[$path];
         }
 
-        $files = array();
+        $files = [];
 
         /** @var \RecursiveDirectoryIterator $iterator */
         $iterator = new \RecursiveIteratorIterator(
@@ -100,10 +100,10 @@ class RsyncUtility
                 if (empty($this->fileExtensions) || in_array($extension, $this->fileExtensions)) {
                     $md5 = md5_file($item);
 
-                    $files[$fileName] = array(
+                    $files[$fileName] = [
                         'file' => $fileName,
                         'md5' => $md5,
-                    );
+                    ];
                 }
             }
         }
@@ -165,7 +165,7 @@ class RsyncUtility
         $targetFiles = $this->getFilesRecursively($targetPath, $useCache);
 
         $sameFiles = array_intersect(array_keys($sourceFiles), array_keys($targetFiles));
-        $modifiedFiles = array();
+        $modifiedFiles = [];
 
         foreach ($sameFiles as $file) {
             if ($sourceFiles[$file]['md5'] !== $targetFiles[$file]['md5']) {

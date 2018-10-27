@@ -43,7 +43,7 @@ class ObjectsInvBrowserViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\Abstr
      */
     public function render($id, $reference, $cmEditor, \Causal\Sphinx\Controller\RestEditorController $controller)
     {
-        $out = array();
+        $out = [];
         $out[] = '<div id="' . $id . '" class="basic">';    // Start of accordion
         $out[] = $controller->accordionReferencesAction($reference, '', false, false);
         $out[] = '</div>';    // End of accordion
@@ -51,11 +51,11 @@ class ObjectsInvBrowserViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\Abstr
         $uriBuilder = $this->controllerContext->getUriBuilder();
         $intersphinxAction = $uriBuilder->reset()->uriFor(
             'updateIntersphinx',
-            array(
+            [
                 'reference' => $reference,
                 'prefix' => 'PREFIX',
                 'remoteUrl' => 'URL',
-            )
+            ]
         );
 
         $out[] = '<script type="text/javascript">';

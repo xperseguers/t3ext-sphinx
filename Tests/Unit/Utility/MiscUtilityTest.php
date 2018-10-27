@@ -73,16 +73,16 @@ class MiscUtilityTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     public function extensionSphinxHasFrenchDocumentation()
     {
         $localizationDirectories = MiscUtility::getLocalizationDirectories('sphinx');
-        $expected = array(
-            'fr' => array(
+        $expected = [
+            'fr' => [
                 'directory' => 'Documentation/Localization.fr_FR',
                 'locale' => 'fr_FR',
-            ),
-            'fr_FR' => array(
+            ],
+            'fr_FR' => [
                 'directory' => 'Documentation/Localization.fr_FR',
                 'locale' => 'fr_FR',
-            ),
-        );
+            ],
+        ];
         $this->assertSame($expected, $localizationDirectories);
     }
 
@@ -153,12 +153,12 @@ YAML;
 
         // Test
         $pythonConfiguration = MiscUtility::yamlToPython($fixtureFilename);
-        $expected = array(
+        $expected = [
             'copyright = u\'2014\'',
             'project = u\'Sphinx Python Documentation Generator and Viewer\'',
             'version = u\'1.2\'',
             'release = u\'1.2.0-dev\'',
-        );
+        ];
         $this->assertSame($expected, $pythonConfiguration);
 
         // Tear down
@@ -182,11 +182,11 @@ YAML;
 
         // Test
         $pythonConfiguration = MiscUtility::yamlToPython($fixtureFilename);
-        $expected = array(
+        $expected = [
             'version = u\'7\'',
             'release = u\'7\'',
             'copyright = u\'2015\'',
-        );
+        ];
         $this->assertSame($expected, $pythonConfiguration);
 
         // Tear down
@@ -435,7 +435,7 @@ YAML;
 
         // Test
         $pythonConfiguration = MiscUtility::yamlToPython($fixtureFilename);
-        $expected = array(
+        $expected = [
             'latex_documents = [(' . LF .
             "u'Index'," . LF .
             "u'sphinx.tex'," . LF .
@@ -448,7 +448,7 @@ YAML;
             "'pointsize': '10pt'," . LF .
             "'preamble': '\\\\usepackage{typo3}'" . LF .
             '}',
-        );
+        ];
         $this->assertSame($expected, $pythonConfiguration);
 
         // Tear down
@@ -476,12 +476,12 @@ YAML;
 
         // Test
         $pythonConfiguration = MiscUtility::yamlToPython($fixtureFilename);
-        $expected = array(
+        $expected = [
             'intersphinx_mapping = {' . LF .
             "'t3tsref': ('https://docs.typo3.org/typo3cms/TyposcriptReference/', None)," . LF .
             "'restdoc': ('https://docs.typo3.org/typo3cms/extensions/restdoc/', None)" . LF .
             '}',
-        );
+        ];
         $this->assertSame($expected, $pythonConfiguration);
 
         // Tear down
@@ -506,11 +506,11 @@ YAML;
 
         // Test
         $pythonConfiguration = MiscUtility::yamlToPython($fixtureFilename);
-        $expected = array(
+        $expected = [
             'extlinks = {' . LF .
             "'issue': ('https://github.com/sphinx-doc/sphinx/issues/%s', 'issue ')" . LF .
             '}',
-        );
+        ];
         $this->assertSame($expected, $pythonConfiguration);
 
         // Tear down
@@ -538,12 +538,12 @@ YAML;
 
         // Test
         $pythonConfiguration = MiscUtility::yamlToPython($fixtureFilename);
-        $expected = array(
+        $expected = [
             'extlinks = {' . LF .
             "'forge': ('https://forge.typo3.org/issues/%s', 'forge: ')," . LF .
             "'ter': ('https://extensions.typo3.org/extension/%s', None)" . LF .
             '}',
-        );
+        ];
         $this->assertSame($expected, $pythonConfiguration);
 
         // Tear down
@@ -566,11 +566,11 @@ YAML;
 
         // Test
         $pythonConfiguration = MiscUtility::yamlToPython($fixtureFilename);
-        $expected = array(
+        $expected = [
             'html_theme_options = {' . LF .
             "'sidebarwidth': 300" . LF .
             '}',
-        );
+        ];
         $this->assertSame($expected, $pythonConfiguration);
 
         // Tear down
@@ -594,12 +594,12 @@ YAML;
 
         // Test
         $pythonConfiguration = MiscUtility::yamlToPython($fixtureFilename);
-        $expected = array(
+        $expected = [
             'html_theme_options = {' . LF .
             "'nosidebar': True," . LF .
             "'sidebarwidth': 300" . LF .
             '}',
-        );
+        ];
         $this->assertSame($expected, $pythonConfiguration);
 
         // Tear down
@@ -624,9 +624,9 @@ YAML;
 
         // Test
         $pythonConfiguration = MiscUtility::yamlToPython($fixtureFilename);
-        $expected = array(
+        $expected = [
             "extensions = ['sphinx.ext.intersphinx', 'sphinxcontrib.youtube']"
-        );
+        ];
         $this->assertSame($expected, $pythonConfiguration);
 
         // Tear down
@@ -649,10 +649,10 @@ YAML;
 
         // Test
         $pythonConfiguration = MiscUtility::yamlToPython($fixtureFilename);
-        $expected = array(
+        $expected = [
             'latex_use_parts = False',
             'latex_show_pagerefs = True',
-        );
+        ];
         $this->assertSame($expected, $pythonConfiguration);
 
         // Tear down

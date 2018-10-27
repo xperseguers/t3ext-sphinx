@@ -56,15 +56,15 @@ class AjaxController extends AbstractActionController
 
         $locales = \Causal\Sphinx\Utility\SphinxBuilder::getSupportedLocales();
         asort($locales);
-        $locales = array('' => $this->translate('language.default')) + $locales;
+        $locales = ['' => $this->translate('language.default')] + $locales;
 
         $projectTemplates = $this->getProjectTemplates();
-        $templates = array();
+        $templates = [];
 
         if ($isGitAvailable) {
             $officialDocuments = $this->documentationRepository->getOfficialDocuments();
 
-            $gitDocuments = array();
+            $gitDocuments = [];
             foreach ($officialDocuments as $officialDocument) {
                 if (!empty($officialDocument['git'])) {
                     $officialDocument['type'] = 'TYPO3 ' . $officialDocument['type'];
@@ -82,14 +82,14 @@ class AjaxController extends AbstractActionController
         }
 
         // Prepend with custom project templates
-        $templates = array($this->translate('dashboard.action.label.customProject') => $projectTemplates) + $templates;
+        $templates = [$this->translate('dashboard.action.label.customProject') => $projectTemplates] + $templates;
 
-        $this->view->assignMultiple(array(
+        $this->view->assignMultiple([
             'locales' => $locales,
             'templates' => $templates,
-        ));
+        ]);
 
-        $response = array();
+        $response = [];
         $response['status'] = 'success';
         $response['statusText'] = $this->view->render();
 
@@ -118,7 +118,7 @@ JS;
      */
     public function createCustomProjectAction($group, $name, $lang, $description, $documentationKey, $directory, $template = '', $git = '')
     {
-        $response = array();
+        $response = [];
         $success = false;
         $isGitAvailable = GitUtility::isAvailable();
         $mayCloneFromGit = false;
@@ -223,19 +223,19 @@ JS;
      */
     public function editCustomProjectAction($documentationKey)
     {
-        $response = array();
+        $response = [];
 
         $locales = \Causal\Sphinx\Utility\SphinxBuilder::getSupportedLocales();
         asort($locales);
-        $locales = array('' => $this->translate('language.default')) + $locales;
+        $locales = ['' => $this->translate('language.default')] + $locales;
 
         $project = $this->projectRepository->findByDocumentationKey($documentationKey);
 
         if ($project !== null) {
-            $this->view->assignMultiple(array(
+            $this->view->assignMultiple([
                 'project' => $project,
                 'locales' => $locales,
-            ));
+            ]);
             $response['status'] = 'success';
             $response['statusText'] = $this->view->render();
         } else {
@@ -261,7 +261,7 @@ JS;
     public function updateCustomProjectAction($group, $name, $lang, $description, $documentationKey,
                                               $originalDocumentationKey, $directory, $updateGroup)
     {
-        $response = array();
+        $response = [];
         $success = false;
 
         // Sanitize directory and documentation key
@@ -320,7 +320,7 @@ JS;
      */
     public function removeCustomProjectAction($documentationKey)
     {
-        $response = array();
+        $response = [];
 
         if ($this->projectRepository->remove($documentationKey)) {
             $response['status'] = 'success';
@@ -350,8 +350,8 @@ JS;
      */
     protected function getProjectTemplates()
     {
-        $templates = array();
-        foreach (array('BlankSingleProject', 'BlankSeparateProject', 'TYPO3DocProject') as $key) {
+        $templates = [];
+        foreach (['BlankSingleProject', 'BlankSeparateProject', 'TYPO3DocProject'] as $key) {
             $templates[$key] = $this->translate('dashboard.projectTemplates.' . $key);
         }
         return $templates;

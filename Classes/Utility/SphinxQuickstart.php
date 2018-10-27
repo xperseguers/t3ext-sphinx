@@ -52,7 +52,7 @@ class SphinxQuickstart
         if (empty($project)) {
             $project = $projectName;
         }
-        $project = str_replace(array("'", ' '), '', $project);
+        $project = str_replace(["'", ' '], '', $project);
 
         // Inside the root directory, two more directories will be created; "_templates"
         // for custom HTML templates and "_static" for custom stylesheets and other static
@@ -86,27 +86,27 @@ class SphinxQuickstart
             $separateSourceBuild = false;
             $masterDocument = 'Index';
             $buildDirectory = 'build';
-            $directories = array(
+            $directories = [
                 $namePrefixTemplatesStatic . 'static' . DIRECTORY_SEPARATOR,
                 $namePrefixTemplatesStatic . 'templates' . DIRECTORY_SEPARATOR,
                 '_make/build/',
-            );
+            ];
             $excludePattern = '_make';
         } elseif ($separateSourceBuild) {
             $buildDirectory = 'build';
-            $directories = array(
+            $directories = [
                 'source/' . $namePrefixTemplatesStatic . 'static' . DIRECTORY_SEPARATOR,
                 'source/' . $namePrefixTemplatesStatic . 'templates' . DIRECTORY_SEPARATOR,
                 'build/',
-            );
+            ];
             $excludePattern = '';
         } else {
             $buildDirectory = '_build';
-            $directories = array(
+            $directories = [
                 $namePrefixTemplatesStatic . 'static' . DIRECTORY_SEPARATOR,
                 $namePrefixTemplatesStatic . 'templates' . DIRECTORY_SEPARATOR,
                 '_build/',
-            );
+            ];
             $excludePattern = '_build';
         }
         foreach ($directories as $directory) {
@@ -118,7 +118,7 @@ class SphinxQuickstart
         // Compatibility with Windows platform
         $binDirectory = str_replace('/', DIRECTORY_SEPARATOR, $binDirectory);
 
-        $markers = array(
+        $markers = [
             'PROJECT' => $project,
             'PROJECT_NAME' => $projectName,
             'AUTHOR' => $author,
@@ -133,15 +133,15 @@ class SphinxQuickstart
             'EXCLUDE_PATTERN' => $excludePattern,
             'BUILD_DIRECTORY' => $buildDirectory,
             'BIN_DIRECTORY' => $binDirectory,
-        );
+        ];
 
-        $config = array(
+        $config = [
             'template' => $template,
             'path' => $pathRoot,
             'masterDocument' => $masterDocument,
             'sourceFileSuffix' => $sourceFileSuffix,
             'markers' => $markers,
-        );
+        ];
 
         return static::createFromTemplate($config);
     }

@@ -56,7 +56,7 @@ class UploadViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\AbstractFormFie
     {
         $name = $this->getName();
         $hasMultiple = $this->tag->getAttribute('multiple') !== null;
-        $allowedFields = array('name', 'type', 'tmp_name', 'error', 'size');
+        $allowedFields = ['name', 'type', 'tmp_name', 'error', 'size'];
         foreach ($allowedFields as $fieldName) {
             $this->registerFieldNameForFormTokenGeneration($name . '[' . $fieldName . ']' . ($hasMultiple ? '[]' : ''));
         }

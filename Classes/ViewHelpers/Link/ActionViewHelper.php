@@ -67,7 +67,7 @@ class ActionViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Link\ActionViewHelpe
      * @param array $checks
      * @return string Rendered link
      */
-    public function render($action = null, array $arguments = array(), $controller = null, $extensionName = null,
+    public function render($action = null, array $arguments = [], $controller = null, $extensionName = null,
                            $pluginName = null, $pageUid = null, $pageType = 0, $noCache = false, $noCacheHash = false,
                            $section = '', $format = '', $linkAccessRestrictedPages = false, array $additionalParams = array(),
                            $absolute = false, $addQueryString = false, array $argumentsToBeExcludedFromQueryString = array(),

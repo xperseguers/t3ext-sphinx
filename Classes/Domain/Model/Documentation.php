@@ -89,7 +89,7 @@ class Documentation
         static $masterToc = null;
         if ($masterToc === null) {
             $masterToc = $this->sphinxReader->getMasterTableOfContents(false);
-            $data = $masterToc ? RestHelper::getMenuData(RestHelper::xmlstr_to_array($masterToc)) : array();
+            $data = $masterToc ? RestHelper::getMenuData(RestHelper::xmlstr_to_array($masterToc)) : [];
             RestHelper::processMasterTableOfContents($data, null, $this->callbackLinks);
             $masterToc = $this->createMasterMenu($data);
         }
@@ -146,8 +146,8 @@ class Documentation
                     $body = MiscUtility::populateCrossReferencingLabels($body, $references, $this->callbackLinks);
                 }
             } else {
-                $linksCategories = array();
-                $contentCategories = array();
+                $linksCategories = [];
+                $contentCategories = [];
                 $indexEntries = $this->sphinxReader->getIndexEntries();
 
                 foreach ($indexEntries as $indexGroup) {
@@ -194,14 +194,14 @@ class Documentation
             $masterData = json_decode($content, true);
 
             $link = call_user_func($this->callbackLinks, $this->sphinxReader->getDefaultFile() . '/');
-            $data = array(
+            $data = [
                 'title' => $masterData['title'],
                 'version' => $globalContext['version'],
                 'release' => $globalContext['release'],
                 'copyright' => $globalContext['copyright'],
                 'url' => $link,
                 'sphinx_version' => $globalContext['sphinx_version'],
-            );
+            ];
         }
         return $data;
     }
@@ -220,10 +220,10 @@ class Documentation
                 $absolute = RestHelper::relativeToAbsolute($this->sphinxReader->getPath() . $this->sphinxReader->getDocument(), '../' . $previousDocument['link']);
                 $link = call_user_func($this->callbackLinks, substr($absolute, strlen($this->sphinxReader->getPath())));
 
-                $data = array(
+                $data = [
                     'title' => $previousDocument['title'],
                     'url' => $link,
-                );
+                ];
             }
         }
         return $data;
@@ -248,10 +248,10 @@ class Documentation
                 $absolute = RestHelper::relativeToAbsolute($nextDocumentPath, '../' . $nextDocument['link']);
                 $link = call_user_func($this->callbackLinks, substr($absolute, strlen($this->sphinxReader->getPath())));
 
-                $data = array(
+                $data = [
                     'title' => $nextDocument['title'],
                     'url' => $link,
-                );
+                ];
             }
         }
         return $data;
@@ -278,10 +278,10 @@ class Documentation
                 $absolute = RestHelper::relativeToAbsolute($parentDocumentPath, '../' . $parentDocument['link']);
                 $link = call_user_func($this->callbackLinks, substr($absolute, strlen($this->sphinxReader->getPath())));
 
-                $data = array(
+                $data = [
                     'title' => $parentDocument['title'],
                     'url' => $link,
-                );
+                ];
             }
         }
         return $data;
@@ -294,10 +294,10 @@ class Documentation
      */
     public function getGeneralIndex()
     {
-        return array(
+        return [
             'title' => 'General Index',    // TODO: translate!
             'url' => call_user_func($this->callbackLinks, 'genindex/'),
-        );
+        ];
     }
 
     /**
@@ -309,8 +309,8 @@ class Documentation
      */
     public function __call($methodName, array $arguments)
     {
-        if (is_callable(array($this->sphinxReader, $methodName))) {
-            return call_user_func(array($this->sphinxReader, $methodName), $arguments);
+        if (is_callable([$this->sphinxReader, $methodName])) {
+            return call_user_func([$this->sphinxReader, $methodName], $arguments);
         }
         return null;
     }
@@ -324,7 +324,7 @@ class Documentation
      */
     protected function createMasterMenu(array $data, $level = 1)
     {
-        $menu = array();
+        $menu = [];
         if ($level == 1) {
             $menu[] = '<ul class="current">';
             $wrapTitle = '%s';
@@ -334,7 +334,7 @@ class Documentation
         }
 
         foreach ($data as $menuEntry) {
-            if (isset($menuEntry['ITEM_STATE']) && in_array($menuEntry['ITEM_STATE'], array('ACT', 'CUR'))) {
+            if (isset($menuEntry['ITEM_STATE']) && in_array($menuEntry['ITEM_STATE'], ['ACT', 'CUR'])) {
                 $currentClass = ' current';
             } else {
                 $currentClass = '';

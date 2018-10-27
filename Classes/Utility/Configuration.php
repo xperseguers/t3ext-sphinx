@@ -37,7 +37,7 @@ class Configuration
     public static function load($configurationFilename)
     {
         $contents = file_get_contents($configurationFilename);
-        $properties = array();
+        $properties = [];
 
         preg_replace_callback(
             '/^\s*([^#].*?)\s*=\s*u?\'(.*)\'/m',
