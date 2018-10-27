@@ -144,7 +144,7 @@ class Setup
 
             // Unzip the Sphinx archive
             $out = array();
-            if (static::unarchive($zipFilename, $targetPath, 'sphinx-doc-sphinx-')) {
+            if (static::unarchive($zipFilename, $targetPath, 'sphinx-')) {
                 $output[] = '[INFO] Sphinx ' . $version . ' has been unpacked.';
 
                 // Patch Sphinx to let us get colored output
@@ -1258,7 +1258,9 @@ EOT;
         foreach ($tags as $tag) {
             $key = $tag['name'];
             $name = $key;
-            $url = $tag['zipball_url'];
+            // $tag['zipball_url'] is not usable right away since it contains a redirect
+            // so we just manually craft it!
+            $url = 'https://codeload.github.com/sphinx-doc/sphinx/zip/' . $key;
 
             // Make sure main release (e.g., "1.2") gets a ".0" patch release version as well
             if (preg_match('/^\d+\.\d+$/', $name)) {
@@ -1531,7 +1533,7 @@ EOT;
                     MiscUtility::recursiveCopy($fromDirectory, $targetDirectory);
                     GeneralUtility::rmdir($fromDirectory, true);
 
-                    // Remove tar.gz archive as we don't need it anymore
+                    // Remove zip/tar.gz archive as we don't need it anymore
                     @unlink($archiveFilename);
                 } else {
                     $success = false;
