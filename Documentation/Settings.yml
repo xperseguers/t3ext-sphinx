@@ -4,7 +4,7 @@
 
 ---
 conf.py:
-  copyright: 2013-2017
+  copyright: 2013-2018
   project: Sphinx Python Documentation Generator and Viewer
   version: 2.5
   release: 2.5.1
