@@ -32,7 +32,6 @@
     }
   },
   "replace": {
-    "sphinx": "self.version",
     "typo3-ter/sphinx": "self.version"
   },
   "suggest": {
@@ -53,6 +52,7 @@
       "dev-master": "2.6.x-dev"
     },
     "typo3/cms": {
+      "extension-key": "sphinx",
       "cms-package-dir": "{$vendor-dir}/typo3/cms",
       "web-dir": ".Build/Web"
     }
